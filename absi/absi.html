@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahmed Abdelsalam - Photoshop Expert</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Section */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(0, 123, 255, 0.1) 0%, transparent 70%);
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(0, 123, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 123, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+        }
+
+        .profile-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            border: 4px solid #007bff;
+            box-shadow: 0 0 30px rgba(0, 123, 255, 0.5);
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #007bff;
+            background-image: url('images/absi.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #007bff, #00d4ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #ccc;
+            margin-bottom: 30px;
+        }
+
+        .glow-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+            cursor: pointer;
+        }
+
+        .glow-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 123, 255, 0.5);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .section:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: #007bff;
+            text-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(45deg, #007bff, #00d4ff);
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            color: #ddd;
+        }
+
+        .about-text h3 {
+            color: #007bff;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .skills-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .skills-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 123, 255, 0.2);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .skills-list li:hover {
+            padding-left: 20px;
+            color: #007bff;
+        }
+
+        .skills-list li:before {
+            content: '▶';
+            color: #007bff;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .skills-list li:hover:before {
+            transform: scale(1.2);
+        }
+
+        /* Portfolio Grid */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .portfolio-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 123, 255, 0.2);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 123, 255, 0.2);
+            border-color: #007bff;
+        }
+
+        .portfolio-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #007bff, #00d4ff);
+        }
+
+        .portfolio-placeholder {
+            height: 200px;
+            background: linear-gradient(135deg, #333, #444);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #007bff;
+            font-size: 14px;
+            border-bottom: 2px solid rgba(0, 123, 255, 0.3);
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .portfolio-content {
+            padding: 20px;
+        }
+
+        .portfolio-content h3 {
+            color: #007bff;
+            margin-bottom: 10px;
+            text-transform: capitalize;
+        }
+
+        /* Contact Section */
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .contact-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(0, 123, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: rgba(0, 123, 255, 0.1);
+            border-color: #007bff;
+            transform: translateY(-5px);
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #007bff, #00d4ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.5rem;
+        }
+
+        .contact-item h3 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .contact-item a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            color: #007bff;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav a {
+            padding: 10px 15px;
+            background: rgba(0, 123, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav a:hover {
+            background: rgba(0, 123, 255, 0.5);
+        }
+
+        /* Animations */
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+            }
+            to {
+                text-shadow: 0 0 30px rgba(0, 123, 255, 0.6);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .nav {
+                position: relative;
+                top: auto;
+                right: auto;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 60px 0;
+                height: 100vh;
+            }
+
+            .profile-photo {
+                width: 150px;
+                height: 150px;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .portfolio-placeholder {
+                height: 150px;
+                font-size: 12px;
+            }
+
+            .nav {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .nav a {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #007bff, #00d4ff);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #0056b3, #007bff);
+        }
+
+        /* Loading Animation */
+        .loading {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .loading.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#thumbnails">Thumbnails</a>
+        <a href="#advertisements">Ads</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="profile-photo pulse"></div>
+            <h1 class="fade-in-up">Ahmed Abdelsalam Mohamed Abdelsalam Yasin</h1>
+            <p class="fade-in-up">Photoshop Expert | 4 Years of Experience | Age 19</p>
+            <a href="#contact" class="glow-button fade-in-up">Get In Touch</a>
+        </div>
+    </section>
+<pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+    <!-- About Section -->
+    <section class="section loading" id="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Professional Journey</h3>
+                    <p>
+                       At just 19 years old, I've established myself as a dedicated Photoshop expert with an impressive 4-year journey in digital design. Starting my creative path at age 15, I've transformed from a curious beginner into a skilled professional who has completed over 150+ high-quality projects.
+
+My expertise spans across multiple design disciplines, with particular mastery in YouTube thumbnail creation and commercial advertisement design. Each project I undertake reflects my commitment to excellence, combining advanced technical skills with innovative creative solutions that deliver measurable results for my clients.
+
+Throughout my career, I've developed a keen eye for visual storytelling, understanding how to capture viewer attention within seconds and convert that interest into engagement. My work has helped content creators increase their click-through rates and businesses enhance their brand presence across digital platforms.
+                    </p>
+                    <p>
+                        I specialize in creating compelling thumbnails that capture attention and drive engagement, 
+                        as well as professional advertisement designs that convert viewers into customers. 
+                        My work combines technical precision with creative flair, ensuring every pixel serves a purpose.
+                    </p>
+                </div>
+                <div class="about-text">
+                    <h3>Expertise & Skills</h3>
+                    <ul class="skills-list">
+                        <li>Advanced Photo Manipulation & Retouching</li>
+                        <li>YouTube Thumbnail Design</li>
+                        <li>Advertisement & Marketing Graphics</li>
+                        <li>Brand Identity & Logo Design</li>
+                        <li>Digital Art & Composition</li>
+                        <li>Color Theory & Visual Hierarchy</li>
+                        <li>Client Communication & Project Management</li>
+                        <li>4 Years Professional Experience more than 150+ photos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Thumbnail Portfolio -->
+    <section class="section loading" id="thumbnails">
+        <div class="container">
+            <h2 class="section-title">Thumbnail Designs</h2>
+            <p style="text-align: center; color: #ccc; margin-bottom: 30px;">
+                Eye-catching thumbnails designed to maximize click-through rates and audience engagement
+            </p>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/aboflah.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>AboFlah Gaming Thumbnail</h3>
+                        <p>Dynamic gaming thumbnail with vibrant effects and engaging composition.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/ai.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>AI Technology Thumbnail</h3>
+                        <p>Futuristic design showcasing artificial intelligence themes.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/boodcast.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Podcast Thumbnail</h3>
+                        <p>Professional podcast thumbnail with modern typography and branding.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/chained together.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Chained Together Game</h3>
+                        <p>Action-packed gaming thumbnail with dramatic lighting effects.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/chainedtwo.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Chained Two Series</h3>
+                        <p>Sequel thumbnail maintaining brand consistency while adding fresh elements.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/cramee.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Cramee Content</h3>
+                        <p>Vibrant and engaging thumbnail designed for maximum viewer appeal.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/drmohamed.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Dr. Mohamed Channel</h3>
+                        <p>Professional medical/educational content thumbnail with clean design.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/fifa.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>FIFA Gaming</h3>
+                        <p>Sports gaming thumbnail with dynamic player compositions and effects.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/flickbarcalona.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Barcelona Football</h3>
+                        <p>Sports-themed thumbnail featuring Barcelona FC branding and players.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/outlast.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Outlast Horror Game</h3>
+                        <p>Horror gaming thumbnail with atmospheric effects and suspenseful design.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/zaza.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Zaza Content</h3>
+                        <p>Creative thumbnail with unique styling and eye-catching visual elements.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advertisement Portfolio -->
+    <section class="section loading" id="advertisements">
+        <div class="container">
+            <h2 class="section-title">Advertisement Designs</h2>
+            <p style="text-align: center; color: #ccc; margin-bottom: 30px;">
+                Professional advertisement designs that drive conversions and build brand recognition
+            </p>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/add.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>General Advertisement</h3>
+                        <p>Multi-purpose advertisement design with compelling call-to-action elements.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/bltage.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Bltage Brand Campaign</h3>
+                        <p>Brand-focused advertisement with modern aesthetic and clear messaging.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/fitness.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Fitness & Health</h3>
+                        <p>Motivational fitness advertisement designed to inspire action and engagement.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/hohos.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Hohos Product Ad</h3>
+                        <p>Product advertisement with appealing visuals and strategic placement.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/mango.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Mango Fashion</h3>
+                        <p>Fashion brand advertisement with elegant styling and brand consistency.</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder" style="background-image: url('images/nike.png');">
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Nike Sports Campaign</h3>
+                        <p>High-energy sports advertisement capturing Nike's dynamic brand essence.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section loading" id="contact">
+        <div class="container">
+            <h2 class="section-title">Let's Work Together</h2>
+            <p style="text-align: center; color: #ccc; margin-bottom: 30px;">
+                Ready to bring your vision to life? Get in touch and let's create something amazing together!
+            </p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <h3>Email</h3>
+                    <a href="mailto:abdelsalamahmed432@gmail.com">abdelsalamahmed432@gmail.com</a>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📱</div>
+                    <h3>Phone</h3>
+                    <a href="tel:+201019344890">+20 10 19344890</a>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">💼</div>
+                    <h3>Experience</h3>
+                    <p>4 Years in Photoshop Design</p>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">🎯</div>
+                    <h3>Age & Specialization</h3>
+                    <p>19 Years Old<br>Thumbnails & Advertisements</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll animations
+        function isInViewport(element) {
+            const rect = element.getBoundingClientRect();
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+        }
+
+        function handleScroll() {
+            const elements = document.querySelectorAll('.loading');
+            elements.forEach(element => {
+                if (isInViewport(element) || element.getBoundingClientRect().top < window.innerHeight) {
+                    element.classList.add('loaded');
+                }
+            });
+        }
+
+        // Portfolio item hover effects
+        document.querySelectorAll('.portfolio-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Contact item animations
+        document.querySelectorAll('.contact-item').forEach((item, index) => {
+            item.style.animationDelay = (index * 0.1) + 's';
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.05)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Skills list animations
+        document.querySelectorAll('.skills-list li').forEach((skill, index) => {
+            skill.addEventListener('mouseenter', function() {
+                this.style.color = '#007bff';
+                this.style.paddingLeft = '20px';
+            });
+            
+            skill.addEventListener('mouseleave', function() {
+                this.style.color = '#ddd';
+                this.style.paddingLeft = '0';
+            });
+        });
+
+        // Initialize scroll animations
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('load', handleScroll);
+
+        // Add typing effect to hero title
+        function typeWriter() {
+            const text = 'Ahmed Abdelsalam Mohamed Abdelsalam Yasin';
+            const titleElement = document.querySelector('.hero h1');
+            if (titleElement) {
+                titleElement.innerHTML = '';
+                let i = 0;
+                function type() {
+                    if (i < text.length) {
+                        titleElement.innerHTML += text.charAt(i);
+                        i++;
+                        setTimeout(type, 100);
+                    }
+                }
+                setTimeout(type, 1000);
+            }
+        }
+
+        // Initialize typing effect
+        window.addEventListener('load', typeWriter);
+
+        // Add parallax effect to hero section
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = 'translateY(' + scrolled * 0.5 + 'px)';
+            }
+        });
+
+        // Add click effects to buttons
+        document.querySelectorAll('.glow-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.3);
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                `;
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add CSS animation for ripple effect
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
