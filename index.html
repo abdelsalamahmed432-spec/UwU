@@ -314,6 +314,48 @@
   }
   .contact-detail a:hover{color:var(--ink);}
 
+  /* ---------- CONTACT FORM ---------- */
+  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:28px; align-items:stretch;}
+  .contact-grid .cta-band{display:flex; flex-direction:column; justify-content:center;}
+  .contact-form{
+    background:var(--panel); border-radius:24px; padding:44px;
+    border:1px solid rgba(255,255,255,0.08);
+  }
+  .contact-form h3{font-family:var(--display); font-size:1.3rem; margin-bottom:8px;}
+  .contact-form .sub{color:var(--paper-dim); font-size:0.9rem; margin-bottom:26px;}
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .form-group{margin-bottom:18px;}
+  .form-group label{
+    display:block; font-family:var(--mono); font-size:0.7rem; text-transform:uppercase;
+    letter-spacing:1px; color:var(--paper-dim); margin-bottom:8px;
+  }
+  .form-group input, .form-group select, .form-group textarea{
+    width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.15);
+    border-radius:10px; padding:12px 14px; color:var(--paper); font-family:var(--body);
+    font-size:0.92rem;
+  }
+  .form-group textarea{resize:vertical; min-height:110px;}
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus{
+    outline:none; border-color:var(--yellow);
+  }
+  .form-group select{ color-scheme:dark; }
+  .form-honeypot{position:absolute; left:-9999px; opacity:0;}
+  .form-submit{
+    font-family:var(--display); font-size:0.9rem; width:100%;
+    background:var(--magenta); color:var(--ink);
+    padding:15px 30px; border:none; border-radius:10px; cursor:pointer;
+    box-shadow:4px 4px 0 var(--ink);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .form-submit:hover{transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink);}
+  .form-submit:disabled{opacity:0.6; cursor:not-allowed; transform:none;}
+  .form-status{
+    margin-top:16px; font-family:var(--mono); font-size:0.85rem; display:none; padding:12px 14px; border-radius:8px;
+  }
+  .form-status.show{display:block;}
+  .form-status.success{color:#0F0A1F; background:#7CFFB2;}
+  .form-status.error{color:#0F0A1F; background:#FF9A9A;}
+
   footer{padding:50px 0 40px; border-top:1px solid rgba(255,255,255,0.08);}
   footer .wrap{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
   footer .social{display:flex; gap:22px; font-family:var(--mono); font-size:0.85rem;}
@@ -367,6 +409,9 @@
   @media (max-width:560px){
     .grid, .services-grid, .process{grid-template-columns:1fr;}
     .cta-band{padding:44px 24px;}
+    .contact-grid{grid-template-columns:1fr;}
+    .contact-form{padding:30px 24px;}
+    .form-row{grid-template-columns:1fr;}
     .contact-detail{flex-direction:column; gap:10px; align-items:center;}
   }
 
@@ -672,21 +717,74 @@
 
 <section id="contact">
   <div class="wrap">
-    <div class="cta-band">
+    <div class="section-head">
+      <div class="eyebrow">Get in touch</div>
       <h2>Got a video coming up?</h2>
-      <p>Send me the details and I'll get back to you with ideas and a custom quote.</p>
-      <div class="hero-ctas">
-        <a href="https://wa.me/201092545695?text=Hi%20Ahmed%2C%20I%27d%20like%20a%20quote%20for%20a%20thumbnail" target="_blank" rel="noopener" class="btn-whatsapp">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.92 0-2.65-1.03-5.14-2.9-7.01A9.865 9.865 0 0 0 12.04 2zm5.8 14.02c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.15-4.9-4.34-.14-.19-1.17-1.56-1.17-2.98 0-1.42.74-2.11 1-2.4.27-.29.58-.36.78-.36.19 0 .39 0 .56.01.18.01.42-.07.65.5.24.58.82 2 .9 2.14.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.19-.27.37-.22.62-.13.26.09 1.63.77 1.91.91.28.14.47.21.53.33.07.12.07.68-.17 1.36z"/></svg>
-          WhatsApp Me
-        </a>
-        <a href="mailto:abdelsalamahmed432@gmail.com" class="btn-primary">Email Me</a>
-        <a href="https://www.instagram.com/ahmed83900/" target="_blank" rel="noopener" class="btn-ghost">Message on Instagram</a>
+      <p>Send me the details and I'll get back to you with ideas and a custom quote — usually within a day.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="cta-band">
+        <h2>Prefer a quick message?</h2>
+        <p>Reach out directly and I'll reply as soon as I can.</p>
+        <div class="hero-ctas">
+          <a href="https://wa.me/201092545695?text=Hi%20Ahmed%2C%20I%27d%20like%20a%20quote%20for%20a%20thumbnail" target="_blank" rel="noopener" class="btn-whatsapp">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.92 0-2.65-1.03-5.14-2.9-7.01A9.865 9.865 0 0 0 12.04 2zm5.8 14.02c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.15-4.9-4.34-.14-.19-1.17-1.56-1.17-2.98 0-1.42.74-2.11 1-2.4.27-.29.58-.36.78-.36.19 0 .39 0 .56.01.18.01.42-.07.65.5.24.58.82 2 .9 2.14.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.19-.27.37-.22.62-.13.26.09 1.63.77 1.91.91.28.14.47.21.53.33.07.12.07.68-.17 1.36z"/></svg>
+            WhatsApp Me
+          </a>
+          <a href="mailto:abdelsalamahmed432@gmail.com" class="btn-primary">Email Me</a>
+        </div>
+        <div class="contact-detail">
+          <a href="mailto:abdelsalamahmed432@gmail.com">abdelsalamahmed432@gmail.com</a>
+          <a href="tel:+201092545695">+20 109 254 5695</a>
+        </div>
+        <div class="contact-detail" style="margin-top:8px;">
+          <a href="https://www.instagram.com/ahmed83900/" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.youtube.com/@ahmedabdelsalam1509" target="_blank" rel="noopener">YouTube</a>
+        </div>
       </div>
-      <div class="contact-detail">
-        <a href="mailto:abdelsalamahmed432@gmail.com">abdelsalamahmed432@gmail.com</a>
-        <a href="tel:+201092545695">+20 109 254 5695</a>
-      </div>
+
+      <form class="contact-form" id="contactForm" action="https://formspree.io/f/mbdvwpdo" method="POST">
+        <h3>Or send a project brief</h3>
+        <p class="sub">Fill this in and it'll land straight in my inbox.</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cf-name">Name</label>
+            <input type="text" id="cf-name" name="name" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="cf-email">Email</label>
+            <input type="email" id="cf-email" name="email" required autocomplete="email">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cf-video">Channel / Video link (optional)</label>
+          <input type="text" id="cf-video" name="video_link" placeholder="e.g. link to your channel or video">
+        </div>
+
+        <div class="form-group">
+          <label for="cf-budget">Budget range</label>
+          <select id="cf-budget" name="budget">
+            <option value="Not sure yet">Not sure yet</option>
+            <option value="$10-30">$10–30</option>
+            <option value="$30-60">$30–60</option>
+            <option value="$60+">$60+</option>
+            <option value="Custom / ongoing">Custom / ongoing work</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="cf-message">Project details</label>
+          <textarea id="cf-message" name="message" required placeholder="Tell me about your channel, the video, and when you need it by."></textarea>
+        </div>
+
+        <!-- honeypot spam trap -->
+        <input type="text" name="_gotcha" class="form-honeypot" tabindex="-1" autocomplete="off">
+
+        <button type="submit" class="form-submit" id="formSubmitBtn">Send Project Brief</button>
+        <div class="form-status" id="formStatus"></div>
+      </form>
     </div>
   </div>
 </section>
@@ -758,6 +856,41 @@
   modalClose.addEventListener('click', ()=>overlay.classList.remove('open'));
   overlay.addEventListener('click', (e)=>{ if(e.target===overlay) overlay.classList.remove('open'); });
   document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') overlay.classList.remove('open'); });
+
+  // Contact form (Formspree, submitted via fetch so the page never navigates away)
+  const contactForm = document.getElementById('contactForm');
+  const formStatus = document.getElementById('formStatus');
+  const formSubmitBtn = document.getElementById('formSubmitBtn');
+
+  contactForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    formSubmitBtn.disabled = true;
+    formSubmitBtn.textContent = 'Sending...';
+    formStatus.className = 'form-status';
+
+    try{
+      const response = await fetch(contactForm.action, {
+        method: 'POST',
+        body: new FormData(contactForm),
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if(response.ok){
+        formStatus.textContent = "Thanks! Your project brief is in — I'll get back to you within a day.";
+        formStatus.className = 'form-status show success';
+        contactForm.reset();
+      } else {
+        formStatus.textContent = "Something went wrong sending that. Please try WhatsApp or email instead.";
+        formStatus.className = 'form-status show error';
+      }
+    } catch(err){
+      formStatus.textContent = "Network error. Please try WhatsApp or email instead.";
+      formStatus.className = 'form-status show error';
+    } finally {
+      formSubmitBtn.disabled = false;
+      formSubmitBtn.textContent = 'Send Project Brief';
+    }
+  });
 </script>
 
 </body>
