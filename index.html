@@ -114,7 +114,12 @@
     flex-shrink:0;
   }
   .navlinks{display:flex; gap:36px; font-weight:700; font-size:0.95rem;}
-  .navlinks a{opacity:0.8; transition:opacity .2s, color .2s;}
+  .navlinks a{opacity:0.8; transition:opacity .2s, color .2s; position:relative;}
+  .navlinks a::after{
+    content:""; position:absolute; left:0; bottom:-4px; width:0; height:2px;
+    background:var(--yellow); transition:width .25s ease;
+  }
+  .navlinks a:hover::after{ width:100%; }
   .navlinks a:hover{opacity:1; color:var(--yellow);}
   .nav-cta{
     background:var(--magenta); color:var(--ink); font-family:var(--display);
@@ -125,6 +130,17 @@
   }
   .nav-cta:hover{transform:translate(-2px,-2px); box-shadow:5px 5px 0 var(--yellow);}
   .mobile-toggle{display:none; background:none; border:none; color:var(--paper); font-size:1.6rem; cursor:pointer;}
+  .hamburger{ position:relative; width:24px; height:18px; display:inline-block; }
+  .hamburger span{
+    position:absolute; left:0; width:100%; height:2px; background:var(--paper);
+    border-radius:2px; transition:transform .3s ease, opacity .3s ease, top .3s ease;
+  }
+  .hamburger span:nth-child(1){ top:0; }
+  .hamburger span:nth-child(2){ top:8px; }
+  .hamburger span:nth-child(3){ top:16px; }
+  .mobile-toggle.open .hamburger span:nth-child(1){ top:8px; transform:rotate(45deg); }
+  .mobile-toggle.open .hamburger span:nth-child(2){ opacity:0; }
+  .mobile-toggle.open .hamburger span:nth-child(3){ top:8px; transform:rotate(-45deg); }
 
   /* ---------- HERO ---------- */
   .hero{padding:90px 0 110px; position:relative;}
@@ -191,9 +207,21 @@
     box-shadow:4px 4px 0 var(--paper);
     transition:transform .15s, box-shadow .15s;
     display:inline-flex; align-items:center; gap:10px;
+    position:relative;
   }
   .btn-whatsapp:hover{transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--paper);}
-  .btn-whatsapp svg{width:18px; height:18px; flex-shrink:0;}
+  .btn-whatsapp svg{width:18px; height:18px; flex-shrink:0; position:relative; z-index:1;}
+  .btn-whatsapp span{position:relative; z-index:1;}
+  .btn-whatsapp::after{
+    content:""; position:absolute; inset:-4px; border-radius:13px;
+    border:2px solid #25D366; opacity:0; pointer-events:none;
+    animation: whatsappPulse 2.6s ease-out infinite;
+  }
+  @keyframes whatsappPulse{
+    0%{ transform:scale(1); opacity:0.65; }
+    70%{ transform:scale(1.08); opacity:0; }
+    100%{ opacity:0; }
+  }
 
   .hero-visual{position:relative; height:420px;}
   .thumb-card{
@@ -237,6 +265,29 @@
   /* ---------- SECTION HEADS ---------- */
   section{padding:100px 0;}
   .section-head{max-width:640px; margin-bottom:56px;}
+
+  /* ---------- SCROLL REVEAL ---------- */
+  .reveal{
+    opacity:0; transform:translateY(28px);
+    transition:opacity .7s cubic-bezier(.16,.84,.44,1), transform .7s cubic-bezier(.16,.84,.44,1);
+  }
+  .reveal.revealed{ opacity:1; transform:translateY(0); }
+
+  .grid .card:nth-child(3n+1){ transition-delay:0s; }
+  .grid .card:nth-child(3n+2){ transition-delay:.08s; }
+  .grid .card:nth-child(3n+3){ transition-delay:.16s; }
+
+  .services-grid .service:nth-child(3n+1){ transition-delay:0s; }
+  .services-grid .service:nth-child(3n+2){ transition-delay:.08s; }
+  .services-grid .service:nth-child(3n+3){ transition-delay:.16s; }
+
+  .process .step:nth-child(4n+1){ transition-delay:0s; }
+  .process .step:nth-child(4n+2){ transition-delay:.08s; }
+  .process .step:nth-child(4n+3){ transition-delay:.16s; }
+  .process .step:nth-child(4n+4){ transition-delay:.24s; }
+
+  .contact-grid > .reveal:nth-child(1){ transition-delay:0s; }
+  .contact-grid > .reveal:nth-child(2){ transition-delay:.12s; }
   .section-head .eyebrow{color:var(--magenta);}
   .section-head .eyebrow::before{background:var(--magenta);}
   h2{font-family:var(--display); font-size:clamp(1.9rem,3vw,2.6rem); line-height:1.1;}
@@ -308,7 +359,9 @@
     width:44px; height:44px; border-radius:10px; margin-bottom:18px;
     display:flex; align-items:center; justify-content:center;
     font-family:var(--display); font-size:1rem; color:var(--ink);
+    transition:transform .3s cubic-bezier(.34,1.56,.64,1);
   }
+  .service:hover .icon{ transform:rotate(-8deg) scale(1.12); }
   .service:nth-child(6n+1) .icon{background:var(--yellow);}
   .service:nth-child(6n+2) .icon{background:var(--cyan);}
   .service:nth-child(6n+3) .icon{background:var(--magenta);}
@@ -405,20 +458,34 @@
   footer{padding:50px 0 40px; border-top:1px solid rgba(255,255,255,0.08);}
   footer .wrap{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
   footer .social{display:flex; gap:22px; font-family:var(--mono); font-size:0.85rem;}
+  footer .social a{position:relative; transition:color .2s;}
+  footer .social a::after{
+    content:""; position:absolute; left:0; bottom:-3px; width:0; height:1.5px;
+    background:var(--yellow); transition:width .25s ease;
+  }
   footer .social a:hover{color:var(--yellow);}
+  footer .social a:hover::after{width:100%;}
   footer .fine{font-family:var(--mono); font-size:0.75rem; color:var(--paper-dim);}
 
   /* ---------- MODAL ---------- */
   .modal-overlay{
     position:fixed; inset:0; background:rgba(15,10,31,0.92);
-    display:none; align-items:center; justify-content:center; z-index:100; padding:24px;
+    display:flex; align-items:center; justify-content:center; z-index:100; padding:24px;
+    opacity:0; visibility:hidden;
+    transition:opacity .25s ease, visibility 0s linear .25s;
   }
-  .modal-overlay.open{display:flex;}
+  .modal-overlay.open{
+    opacity:1; visibility:visible;
+    transition:opacity .25s ease, visibility 0s linear 0s;
+  }
   .modal{
     background:var(--panel); border-radius:20px; max-width:560px; width:100%;
     border:1px solid rgba(255,255,255,0.1); overflow:hidden;
     max-height:90vh; overflow-y:auto;
+    transform:scale(.92); opacity:0;
+    transition:transform .3s cubic-bezier(.34,1.56,.64,1), opacity .25s ease;
   }
+  .modal-overlay.open .modal{ transform:scale(1); opacity:1; }
   .modal .art{width:100%; background:#000;}
   .modal .art img{width:100%; height:auto; display:block;}
   .modal .body{padding:26px;}
@@ -463,12 +530,13 @@
 
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important; scroll-behavior:auto !important; animation:none !important;}
-    .hero .eyebrow, .hero h1, .hero p.lede, .hero .hero-ctas, .thumb-card{
+    .hero .eyebrow, .hero h1, .hero p.lede, .hero .hero-ctas, .thumb-card, .reveal{
       opacity:1 !important; transform:none !important;
     }
     .thumb-1{ transform:rotate(7deg) !important; }
     .thumb-2{ transform:rotate(-9deg) !important; }
     .thumb-3{ transform:rotate(4deg) !important; }
+    .btn-whatsapp::after{ display:none; }
   }
 
   :focus-visible{outline:3px solid var(--yellow); outline-offset:2px;}
@@ -487,7 +555,9 @@
       <a href="#process">Process</a>
       <a href="#contact">Contact</a>
     </div>
-    <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">☰</button>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+      <span class="hamburger"><span></span><span></span><span></span></span>
+    </button>
     <a href="#contact" class="nav-cta">Get a Quote</a>
   </div>
 </nav>
@@ -552,7 +622,7 @@
 
 <section id="work">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">Selected work</div>
       <h2>Built to be clicked.</h2>
       <p>A selection of YouTube thumbnails and promotional graphics — each one designed around one job: making someone stop scrolling.</p>
@@ -569,7 +639,7 @@
 
     <div class="grid" id="grid">
 
-      <div class="card" data-cat="sports"
+      <div class="card reveal" data-cat="sports"
         data-img="assets/img/ucl-matchday-01.webp"
         data-title="Champions League Matchday Reaction"
         data-desc="A UEFA Champions League reaction thumbnail built around a host portrait, club crests, and the tournament trophy, composited to feel like a live broadcast moment."
@@ -582,7 +652,7 @@
         <div class="info"><h3>Champions League Matchday Reaction</h3><p>YouTube · Photoshop + AI</p></div>
       </div>
 
-      <div class="card" data-cat="sports"
+      <div class="card reveal" data-cat="sports"
         data-img="assets/img/el-clasico-panel.webp"
         data-title="El Clásico Preview — Podcast Panel"
         data-desc="A four-way split-panel thumbnail for a football podcast episode previewing El Clásico, using diagonal frames and club crests to keep each host distinct while reading as one composition."
@@ -595,7 +665,7 @@
         <div class="info"><h3>El Clásico Preview — Podcast Panel</h3><p>YouTube · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="sports"
+      <div class="card reveal" data-cat="sports"
         data-img="assets/img/guess-the-player.webp"
         data-title="Guess the Player — Interactive Thumbnail"
         data-desc="A comic-book styled thumbnail for a guessing-game format, using a mystery silhouette and bold Arabic typography to drive curiosity clicks."
@@ -608,7 +678,7 @@
         <div class="info"><h3>Guess the Player</h3><p>YouTube · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="gaming"
+      <div class="card reveal" data-cat="gaming"
         data-img="assets/img/horror-game-reaction.webp"
         data-title="Horror Game Reaction Thumbnail"
         data-desc="A high-contrast horror thumbnail pairing an exaggerated reaction shot with a menacing in-game creature, using warm rim lighting to separate the subject from a dark background."
@@ -621,7 +691,7 @@
         <div class="info"><h3>Horror Game Reaction</h3><p>YouTube · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="sports"
+      <div class="card reveal" data-cat="sports"
         data-img="assets/img/ucl-matchday-03.webp"
         data-title="Champions League Matchday 3 Recap"
         data-desc="A bold red-toned recap thumbnail for a Champions League matchday, layering rival club shirts and the trophy around a central host portrait for instant recognition."
@@ -634,7 +704,7 @@
         <div class="info"><h3>Champions League Matchday 3</h3><p>YouTube · Photoshop + AI</p></div>
       </div>
 
-      <div class="card" data-cat="sports"
+      <div class="card reveal" data-cat="sports"
         data-img="assets/img/el-clasico-showdown.webp"
         data-title="El Clásico Showdown"
         data-desc="A moody blue-and-purple El Clásico thumbnail built around a shocked-reaction host flanked by two rival stars, with bold outlined Arabic type anchoring the composition."
@@ -647,7 +717,7 @@
         <div class="info"><h3>El Clásico Showdown</h3><p>YouTube · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="sports"
+      <div class="card reveal" data-cat="sports"
         data-img="assets/img/guess-the-team.webp"
         data-title="Guess the Team — Podcast Thumbnail"
         data-desc="A comic-panel layout for a football podcast guessing segment, using four bright, individually framed host shots around a central mystery mark to build a consistent series look."
@@ -660,7 +730,7 @@
         <div class="info"><h3>Guess the Team</h3><p>YouTube · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="educational"
+      <div class="card reveal" data-cat="educational"
         data-img="assets/img/course-apply-now.webp"
         data-title="Course Enrollment Promo — 3BSI Digital Academy"
         data-desc="A vertical enrollment ad for a Photoshop and digital marketing course, using a sunset beach scene, layered typography, and platform icons to communicate the course's practical focus."
@@ -673,7 +743,7 @@
         <div class="info"><h3>Course Enrollment Promo</h3><p>Social Ad · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="educational"
+      <div class="card reveal" data-cat="educational"
         data-img="assets/img/course-ramadan-edition.webp"
         data-title="Course Description Post — Ramadan Edition"
         data-desc="A retro-toned course description graphic built for a seasonal Ramadan promotion, pairing a warm orange palette and textured patterns with a clear discount callout."
@@ -686,7 +756,7 @@
         <div class="info"><h3>Course Description — Ramadan Edition</h3><p>Social Post · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="ads"
+      <div class="card reveal" data-cat="ads"
         data-img="assets/img/ytarabia-banner.webp"
         data-title="YTArabia — YouTube Channel Banner"
         data-desc="A cyberpunk-themed channel banner combining a moody host portrait, a retro-futuristic skyline, and neon lightning accents to establish a bold visual identity for the YTArabia brand."
@@ -699,7 +769,7 @@
         <div class="info"><h3>YTArabia Channel Banner</h3><p>YouTube · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="gaming"
+      <div class="card reveal" data-cat="gaming"
         data-img="assets/img/mystery-horror-reveal.webp"
         data-title="Mystery Horror Reveal"
         data-desc="A suspense-driven horror thumbnail pairing a startled reaction shot with a glowing question mark and a lurking creature silhouette to maximize curiosity clicks."
@@ -712,7 +782,7 @@
         <div class="info"><h3>Mystery Horror Reveal</h3><p>YouTube · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="gaming"
+      <div class="card reveal" data-cat="gaming"
         data-img="assets/img/fut-champions-journey.webp"
         data-title="FUT Champions — Start of the Journey"
         data-desc="A high-energy FIFA Ultimate Team thumbnail combining celebrating player cutouts, gold coin motifs, and bold Arabic typography to signal the start of a new competitive season."
@@ -725,7 +795,7 @@
         <div class="info"><h3>FUT Champions — Start of the Journey</h3><p>YouTube · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="gaming"
+      <div class="card reveal" data-cat="gaming"
         data-img="assets/img/nightmares-horror-reaction.webp"
         data-title="Nightmares — Horror Game Reaction"
         data-desc="A tense horror thumbnail built around a wide-eyed reaction shot in a yellow raincoat, with a grinning creature emerging from a red-lit doorway to build dread at a glance."
@@ -738,7 +808,7 @@
         <div class="info"><h3>Nightmares — Horror Reaction</h3><p>YouTube · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="gaming"
+      <div class="card reveal" data-cat="gaming"
         data-img="assets/img/gnome-hunt-reaction.webp"
         data-title="Gnome Hunt — Game Reaction Thumbnail"
         data-desc="A quirky game-reaction thumbnail pairing a puzzled host portrait with oversized gnome characters and bold pink typography for a lighthearted gaming series."
@@ -751,7 +821,7 @@
         <div class="info"><h3>Gnome Hunt Reaction</h3><p>YouTube · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="entertainment"
+      <div class="card reveal" data-cat="entertainment"
         data-img="assets/img/opposite-of-expected.webp"
         data-title="Opposite of Expected — Reaction/Commentary Thumbnail"
         data-desc="A bold celebrity-commentary thumbnail using strong yellow lighting and dimensional Arabic typography to create an eye-catching, editorial-style composition."
@@ -764,7 +834,7 @@
         <div class="info"><h3>Opposite of Expected</h3><p>YouTube · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="educational"
+      <div class="card reveal" data-cat="educational"
         data-img="assets/img/course-photoshop-february.webp"
         data-title="Photoshop Course Announcement — 3BSI Digital Academy"
         data-desc="A modern course-launch graphic combining a personal instructor photo, Photoshop toolbar iconography, and topographic line art to promote a new Photoshop training cohort."
@@ -777,7 +847,7 @@
         <div class="info"><h3>Photoshop Course Announcement</h3><p>Social Ad · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="ads"
+      <div class="card reveal" data-cat="ads"
         data-img="assets/img/hohos-product-ad.webp"
         data-title="HOHOs — Chocolate Roll Product Ad"
         data-desc="A dynamic product ad using dramatic milk and chocolate splash effects to give a packaged snack a premium, appetite-driving presentation."
@@ -790,7 +860,7 @@
         <div class="info"><h3>HOHOs Product Ad</h3><p>Social Ad · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="ads"
+      <div class="card reveal" data-cat="ads"
         data-img="assets/img/fitness-world-gym-ad.webp"
         data-title="Fitness World Gym — Motivational Promo"
         data-desc="A high-contrast fitness promotional graphic pairing a strong athlete portrait with bold Arabic motivational copy to drive gym membership sign-ups."
@@ -803,7 +873,7 @@
         <div class="info"><h3>Fitness World Gym Promo</h3><p>Social Ad · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="ads"
+      <div class="card reveal" data-cat="ads"
         data-img="assets/img/air-jordan-product-ad.webp"
         data-title="Air Jordan 1 — Product Launch Ad"
         data-desc="A clean, brand-forward sneaker ad using a dramatic blue gradient and a floating product shot to highlight a signature Jordan colorway."
@@ -816,7 +886,7 @@
         <div class="info"><h3>Air Jordan 1 Product Ad</h3><p>Social Ad · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="ads"
+      <div class="card reveal" data-cat="ads"
         data-img="assets/img/real-estate-delta-cities.webp"
         data-title="Delta Cities — Real Estate Promo"
         data-desc="A polished real estate ad using a phone-frame building reveal and a professional model shot to promote a new generation of developments, paired with a limited-time offer badge."
@@ -829,7 +899,7 @@
         <div class="info"><h3>Delta Cities Real Estate Promo</h3><p>Social Ad · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="ads"
+      <div class="card reveal" data-cat="ads"
         data-img="assets/img/juice-burst-product-ad.webp"
         data-title="Juice Burst — Orange Juice Product Ad"
         data-desc="A vibrant product ad using radiant color and dynamic liquid-splash effects to give a fresh juice bottle an energetic, thirst-quenching presentation."
@@ -842,7 +912,7 @@
         <div class="info"><h3>Juice Burst Product Ad</h3><p>Social Ad · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="gaming"
+      <div class="card reveal" data-cat="gaming"
         data-img="assets/img/fnaf-horror-reaction.webp"
         data-title="Five Nights Reaction — Horror Game Thumbnail"
         data-desc="A high-impact horror gaming thumbnail contrasting a shocked host portrait with a menacing golden animatronic and bold red exclamatory type."
@@ -855,7 +925,7 @@
         <div class="info"><h3>Five Nights Reaction</h3><p>YouTube · Photoshop</p></div>
       </div>
 
-      <div class="card" data-cat="gaming"
+      <div class="card reveal" data-cat="gaming"
         data-img="assets/img/heart-stopped-horror-reaction.webp"
         data-title="My Heart Stopped — Horror Reaction Thumbnail"
         data-desc="A tense horror thumbnail pairing a startled host close-up with a screaming red-lit creature and glowing outlined Arabic type for maximum shock value."
@@ -874,37 +944,37 @@
 
 <section id="services">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">What I do</div>
       <h2>One designer, every format.</h2>
     </div>
     <div class="services-grid">
-      <div class="service">
+      <div class="service reveal">
         <div class="icon">Yt</div>
         <h3>YouTube Thumbnail Design</h3>
         <p>Scroll-stopping thumbnails matched to your channel's style and built to lift click-through rate.</p>
       </div>
-      <div class="service">
+      <div class="service reveal">
         <div class="icon">Gm</div>
         <h3>Gaming Thumbnail Design</h3>
         <p>High-energy composites for gaming and horror content, built around reaction shots and in-game moments.</p>
       </div>
-      <div class="service">
+      <div class="service reveal">
         <div class="icon">Ed</div>
         <h3>Educational Thumbnail Design</h3>
         <p>Clear, credible thumbnails for tutorials and courses that promise value at a glance.</p>
       </div>
-      <div class="service">
+      <div class="service reveal">
         <div class="icon">Dc</div>
         <h3>Documentary Thumbnail Design</h3>
         <p>Cinematic, restrained compositions for long-form and documentary-style videos.</p>
       </div>
-      <div class="service">
+      <div class="service reveal">
         <div class="icon">Sm</div>
         <h3>Social Media Promotional Graphics</h3>
         <p>On-brand posts, ads, and announcement graphics that keep your feed consistent and scroll-worthy.</p>
       </div>
-      <div class="service">
+      <div class="service reveal">
         <div class="icon">Rt</div>
         <h3>Photo Manipulation &amp; Retouching</h3>
         <p>Clean background work, compositing, and retouching, sped up with AI-assisted tools.</p>
@@ -916,27 +986,27 @@
 
 <section id="process">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">How we'll work</div>
       <h2>From brief to delivered file.</h2>
     </div>
     <div class="process">
-      <div class="step">
+      <div class="step reveal">
         <div class="num">01</div>
         <h3>Brief</h3>
         <p>You send your video, channel style, and any references you like.</p>
       </div>
-      <div class="step">
+      <div class="step reveal">
         <div class="num">02</div>
         <h3>Concept</h3>
         <p>I sketch the composition and headline direction before going all in.</p>
       </div>
-      <div class="step">
+      <div class="step reveal">
         <div class="num">03</div>
         <h3>Design</h3>
         <p>Full design pass in Photoshop, with AI tools used for speed on retouching and compositing.</p>
       </div>
-      <div class="step">
+      <div class="step reveal">
         <div class="num">04</div>
         <h3>Deliver</h3>
         <p>You get the final file within 24–48 hours, plus revisions included.</p>
@@ -947,13 +1017,13 @@
 
 <section id="contact">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">Get in touch</div>
       <h2>Got a video coming up?</h2>
       <p>Send me the details and I'll get back to you with ideas and a custom quote — usually within a day.</p>
     </div>
     <div class="contact-grid">
-      <div class="cta-band">
+      <div class="cta-band reveal">
         <h2>Prefer a quick message?</h2>
         <p>Reach out directly and I'll reply as soon as I can.</p>
         <div class="hero-ctas">
@@ -973,7 +1043,7 @@
         </div>
       </div>
 
-      <form class="contact-form" id="contactForm" action="https://formspree.io/f/mbdvwpdo" method="POST">
+      <form class="contact-form reveal" id="contactForm" action="https://formspree.io/f/mbdvwpdo" method="POST">
         <h3>Or send a project brief</h3>
         <p class="sub">Fill this in and it'll land straight in my inbox.</p>
 
@@ -1043,10 +1113,29 @@
 </div>
 
 <script>
+  // Scroll-reveal: fade/slide elements in as they enter the viewport
+  const revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    const revealObserver = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.classList.add('revealed');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.12, rootMargin:'0px 0px -40px 0px' });
+    revealEls.forEach(el=> revealObserver.observe(el));
+  } else {
+    revealEls.forEach(el=> el.classList.add('revealed'));
+  }
+
   // Mobile nav toggle
   const mobileToggle = document.getElementById('mobileToggle');
   const navLinks = document.getElementById('navLinks');
-  mobileToggle.addEventListener('click', ()=> navLinks.classList.toggle('open'));
+  mobileToggle.addEventListener('click', ()=>{
+    navLinks.classList.toggle('open');
+    mobileToggle.classList.toggle('open');
+  });
   navLinks.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=> navLinks.classList.remove('open')));
 
   // Filter
