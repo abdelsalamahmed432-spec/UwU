@@ -156,6 +156,8 @@
     background:var(--yellow); transition:width .25s ease;
   }
   .navlinks a:hover::after{ width:100%; }
+  .navlinks a.active-link{ color:var(--yellow); opacity:1; }
+  .navlinks a.active-link::after{ width:100%; }
   .navlinks a:hover{opacity:1; color:var(--yellow);}
   .nav-cta{
     background:var(--magenta); color:var(--ink); font-family:var(--display);
@@ -611,6 +613,7 @@
     .contact-form{padding:30px 24px;}
     .form-row{grid-template-columns:1fr;}
     .contact-detail{flex-direction:column; gap:10px; align-items:center;}
+    .shape{ display:none; }
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -627,9 +630,62 @@
   :focus-visible{outline:3px solid var(--yellow); outline-offset:2px;}
 
   img{loading:lazy;}
+
+  /* ---------- SCROLL PROGRESS BAR ---------- */
+  .scroll-progress{
+    position:fixed; top:0; left:0; height:3px; width:100%;
+    background:linear-gradient(90deg, var(--magenta), var(--yellow), var(--cyan));
+    transform:scaleX(0); transform-origin:0 0;
+    z-index:200; pointer-events:none;
+  }
+  [dir="rtl"] .scroll-progress{ transform-origin:100% 0; }
+
+  /* ---------- PAGE TRANSITION WIPE ---------- */
+  .page-transition{
+    position:fixed; inset:0; z-index:300; pointer-events:none;
+    background:linear-gradient(135deg, var(--magenta), var(--violet) 60%, var(--cyan));
+    transform:scaleY(0); transform-origin:bottom;
+    transition:transform .32s cubic-bezier(.76,0,.24,1);
+  }
+  .page-transition.active{ transform:scaleY(1); }
+
+  /* ---------- DECORATIVE GEOMETRIC SHAPES ---------- */
+  .shape{ position:absolute; z-index:0; pointer-events:none; }
+  .shape-circle{ border-radius:50%; border:3px solid currentColor; }
+  .shape-circle.filled{ background:currentColor; border:none; }
+  .shape-square{ border-radius:8px; background:currentColor; }
+  .shape-square.outline{ background:transparent; border:3px solid currentColor; border-radius:10px; }
+  .shape-triangle{ background:currentColor; clip-path:polygon(50% 0%, 0% 100%, 100% 100%); }
+  .shape-ring{ border-radius:50%; border:6px solid currentColor; }
+  .c-magenta{ color:var(--magenta); }
+  .c-yellow{ color:var(--yellow); }
+  .c-cyan{ color:var(--cyan); }
+  .c-violet{ color:var(--violet); }
+
+  @keyframes shapeFloat{
+    0%, 100%{ transform:translateY(0) rotate(var(--r,0deg)); }
+    50%{ transform:translateY(-20px) rotate(var(--r,0deg)); }
+  }
+  @keyframes shapeSpin{
+    from{ transform:rotate(0deg); }
+    to{ transform:rotate(360deg); }
+  }
+  @keyframes shapeFloatSpin{
+    0%{ transform:translateY(0) rotate(0deg); }
+    50%{ transform:translateY(-16px) rotate(180deg); }
+    100%{ transform:translateY(0) rotate(360deg); }
+  }
+  .shape.float{ animation:shapeFloat 6s ease-in-out infinite; }
+  .shape.spin{ animation:shapeSpin 20s linear infinite; }
+  .shape.float-spin{ animation:shapeFloatSpin 15s ease-in-out infinite; }
+
+  section, header.hero{ position:relative; }
 </style>
 </head>
 <body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+<div class="page-transition" id="pageTransition"></div>
 
 <nav>
   <div class="wrap">
@@ -656,6 +712,9 @@
 </nav>
 
 <header class="hero">
+  <div class="shape shape-ring c-cyan float" style="width:90px; height:90px; top:8%; left:4%; opacity:0.35; --r:0deg;"></div>
+  <div class="shape shape-square outline c-yellow spin" style="width:46px; height:46px; bottom:12%; left:8%; opacity:0.4;"></div>
+  <div class="shape shape-triangle c-magenta float" style="width:36px; height:32px; top:65%; left:2%; opacity:0.3; --r:-12deg;"></div>
   <div class="wrap">
     <div>
       <div class="eyebrow" data-i18n="hero.eyebrow">YouTube Thumbnail Design</div>
@@ -688,6 +747,7 @@
 </header>
 
 <section id="about">
+  <div class="shape shape-circle c-violet float" style="width:60px; height:60px; top:10%; right:6%; opacity:0.3; --r:0deg;"></div>
   <div class="wrap">
     <div class="about-grid">
       <div>
@@ -714,6 +774,8 @@
 </section>
 
 <section id="work">
+  <div class="shape shape-square outline c-cyan float" style="width:54px; height:54px; top:4%; right:10%; opacity:0.3; --r:15deg;"></div>
+  <div class="shape shape-ring c-magenta float-spin" style="width:70px; height:70px; bottom:6%; left:3%; opacity:0.25;"></div>
   <div class="wrap">
     <div class="section-head reveal">
       <div class="eyebrow" data-i18n="work.eyebrow">Selected work</div>
@@ -1082,6 +1144,8 @@
 </section>
 
 <section id="services">
+  <div class="shape shape-triangle c-yellow float" style="width:40px; height:36px; top:8%; left:5%; opacity:0.3; --r:20deg;"></div>
+  <div class="shape shape-circle c-cyan float" style="width:50px; height:50px; bottom:10%; right:5%; opacity:0.3; --r:0deg;"></div>
   <div class="wrap">
     <div class="section-head reveal">
       <div class="eyebrow" data-i18n="services.eyebrow">What I do</div>
@@ -1124,6 +1188,8 @@
 </section>
 
 <section id="pricing">
+  <div class="shape shape-square outline c-magenta spin" style="width:44px; height:44px; top:6%; right:8%; opacity:0.3;"></div>
+  <div class="shape shape-ring c-yellow float" style="width:60px; height:60px; bottom:8%; left:6%; opacity:0.3; --r:0deg;"></div>
   <div class="wrap">
     <div class="section-head reveal">
       <div class="eyebrow" data-i18n="pricing.eyebrow">Pricing</div>
@@ -1180,6 +1246,7 @@
 </section>
 
 <section id="process">
+  <div class="shape shape-triangle c-violet float" style="width:38px; height:34px; top:5%; right:6%; opacity:0.3; --r:-25deg;"></div>
   <div class="wrap">
     <div class="section-head reveal">
       <div class="eyebrow" data-i18n="process.eyebrow">How we'll work</div>
@@ -1211,6 +1278,8 @@
 </section>
 
 <section id="contact">
+  <div class="shape shape-circle c-cyan float" style="width:56px; height:56px; top:4%; left:6%; opacity:0.3; --r:0deg;"></div>
+  <div class="shape shape-square outline c-yellow float" style="width:40px; height:40px; bottom:6%; right:8%; opacity:0.3; --r:10deg;"></div>
   <div class="wrap">
     <div class="section-head reveal">
       <div class="eyebrow" data-i18n="contact.eyebrow">Get in touch</div>
@@ -1478,6 +1547,65 @@
     const current = document.documentElement.getAttribute('data-theme') || 'dark';
     setTheme(current === 'light' ? 'dark' : 'light');
   });
+
+  // Scroll progress bar
+  const scrollProgress = document.getElementById('scrollProgress');
+  function updateScrollProgress(){
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const pct = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
+    scrollProgress.style.transform = `scaleX(${pct})`;
+  }
+  window.addEventListener('scroll', updateScrollProgress, { passive:true });
+  updateScrollProgress();
+
+  // Page-transition wipe effect for in-page section navigation
+  const pageTransition = document.getElementById('pageTransition');
+  const navEl = document.querySelector('nav');
+  let transitionBusy = false;
+
+  function wipeNavigateTo(hash){
+    const target = document.querySelector(hash);
+    if(!target || transitionBusy) return;
+    transitionBusy = true;
+    pageTransition.style.transformOrigin = 'bottom';
+    pageTransition.classList.add('active');
+    setTimeout(()=>{
+      const navHeight = navEl ? navEl.offsetHeight : 0;
+      const targetY = target.getBoundingClientRect().top + window.pageYOffset - navHeight + 1;
+      window.scrollTo({ top: targetY, behavior:'auto' });
+      pageTransition.style.transformOrigin = 'top';
+      pageTransition.classList.remove('active');
+      setTimeout(()=>{ transitionBusy = false; }, 340);
+    }, 320);
+  }
+
+  document.querySelectorAll('a[href^="#"]').forEach(link=>{
+    const hash = link.getAttribute('href');
+    if(hash.length > 1 && document.querySelector(hash)){
+      link.addEventListener('click', (e)=>{
+        e.preventDefault();
+        wipeNavigateTo(hash);
+      });
+    }
+  });
+
+  // Scrollspy: highlight the nav link matching the section currently in view
+  const spySections = document.querySelectorAll('section[id], header[id]');
+  const spyLinks = document.querySelectorAll('.navlinks a[href^="#"]');
+  if('IntersectionObserver' in window && spySections.length){
+    const spyObserver = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          const id = entry.target.getAttribute('id');
+          spyLinks.forEach(l=>{
+            l.classList.toggle('active-link', l.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }, { rootMargin:'-40% 0px -55% 0px', threshold:0 });
+    spySections.forEach(sec=> spyObserver.observe(sec));
+  }
 
   // Scroll-reveal: fade/slide elements in as they enter the viewport
   const revealEls = document.querySelectorAll('.reveal');
