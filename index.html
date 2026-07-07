@@ -640,15 +640,6 @@
   }
   [dir="rtl"] .scroll-progress{ transform-origin:100% 0; }
 
-  /* ---------- PAGE TRANSITION WIPE ---------- */
-  .page-transition{
-    position:fixed; inset:0; z-index:300; pointer-events:none;
-    background:linear-gradient(135deg, var(--magenta), var(--violet) 60%, var(--cyan));
-    transform:scaleY(0); transform-origin:bottom;
-    transition:transform .32s cubic-bezier(.76,0,.24,1);
-  }
-  .page-transition.active{ transform:scaleY(1); }
-
   /* ---------- DECORATIVE GEOMETRIC SHAPES ---------- */
   .shape{ position:absolute; z-index:0; pointer-events:none; }
   .shape-circle{ border-radius:50%; border:3px solid currentColor; }
@@ -663,21 +654,29 @@
   .c-violet{ color:var(--violet); }
 
   @keyframes shapeFloat{
-    0%, 100%{ transform:translateY(0) rotate(var(--r,0deg)); }
-    50%{ transform:translateY(-20px) rotate(var(--r,0deg)); }
+    0%, 100%{ transform:translate(0,0) rotate(var(--r,0deg)); }
+    50%{ transform:translate(var(--dx,0px),-26px) rotate(var(--r,0deg)); }
   }
   @keyframes shapeSpin{
     from{ transform:rotate(0deg); }
     to{ transform:rotate(360deg); }
   }
   @keyframes shapeFloatSpin{
-    0%{ transform:translateY(0) rotate(0deg); }
-    50%{ transform:translateY(-16px) rotate(180deg); }
-    100%{ transform:translateY(0) rotate(360deg); }
+    0%{ transform:translate(0,0) rotate(0deg); }
+    50%{ transform:translate(var(--dx,14px),-22px) rotate(180deg); }
+    100%{ transform:translate(0,0) rotate(360deg); }
   }
-  .shape.float{ animation:shapeFloat 6s ease-in-out infinite; }
-  .shape.spin{ animation:shapeSpin 20s linear infinite; }
-  .shape.float-spin{ animation:shapeFloatSpin 15s ease-in-out infinite; }
+  @keyframes shapeDrift{
+    0%{ transform:translate(0,0) rotate(var(--r,0deg)); }
+    25%{ transform:translate(var(--dx,24px), -16px) rotate(calc(var(--r,0deg) + 8deg)); }
+    50%{ transform:translate(0,-30px) rotate(var(--r,0deg)); }
+    75%{ transform:translate(calc(var(--dx,24px) * -1), -16px) rotate(calc(var(--r,0deg) - 8deg)); }
+    100%{ transform:translate(0,0) rotate(var(--r,0deg)); }
+  }
+  .shape.float{ animation:shapeFloat 5s ease-in-out infinite; }
+  .shape.spin{ animation:shapeSpin 14s linear infinite; }
+  .shape.float-spin{ animation:shapeFloatSpin 10s ease-in-out infinite; }
+  .shape.drift{ animation:shapeDrift 9s ease-in-out infinite; }
 
   section, header.hero{ position:relative; }
 </style>
@@ -685,7 +684,6 @@
 <body>
 
 <div class="scroll-progress" id="scrollProgress"></div>
-<div class="page-transition" id="pageTransition"></div>
 
 <nav>
   <div class="wrap">
@@ -712,9 +710,13 @@
 </nav>
 
 <header class="hero">
-  <div class="shape shape-ring c-cyan float" style="width:90px; height:90px; top:8%; left:4%; opacity:0.35; --r:0deg;"></div>
+  <div class="shape shape-ring c-cyan drift" style="width:90px; height:90px; top:8%; left:4%; opacity:0.35; --r:0deg; --dx:20px;"></div>
   <div class="shape shape-square outline c-yellow spin" style="width:46px; height:46px; bottom:12%; left:8%; opacity:0.4;"></div>
-  <div class="shape shape-triangle c-magenta float" style="width:36px; height:32px; top:65%; left:2%; opacity:0.3; --r:-12deg;"></div>
+  <div class="shape shape-triangle c-magenta drift" style="width:36px; height:32px; top:65%; left:2%; opacity:0.3; --r:-12deg; --dx:-16px;"></div>
+  <div class="shape shape-circle filled c-violet float" style="width:14px; height:14px; top:20%; left:22%; opacity:0.5;"></div>
+  <div class="shape shape-circle c-yellow drift" style="width:44px; height:44px; top:35%; right:6%; opacity:0.28; --r:0deg; --dx:-22px;"></div>
+  <div class="shape shape-square filled c-cyan float-spin" style="width:16px; height:16px; bottom:28%; right:14%; opacity:0.4;"></div>
+  <div class="shape shape-triangle c-violet drift" style="width:26px; height:24px; top:5%; right:22%; opacity:0.32; --r:40deg; --dx:18px;"></div>
   <div class="wrap">
     <div>
       <div class="eyebrow" data-i18n="hero.eyebrow">YouTube Thumbnail Design</div>
@@ -747,7 +749,9 @@
 </header>
 
 <section id="about">
-  <div class="shape shape-circle c-violet float" style="width:60px; height:60px; top:10%; right:6%; opacity:0.3; --r:0deg;"></div>
+  <div class="shape shape-circle c-violet drift" style="width:60px; height:60px; top:10%; right:6%; opacity:0.3; --r:0deg; --dx:-18px;"></div>
+  <div class="shape shape-triangle c-cyan float" style="width:28px; height:26px; bottom:15%; left:4%; opacity:0.3; --r:15deg;"></div>
+  <div class="shape shape-square filled c-yellow float-spin" style="width:14px; height:14px; top:40%; right:20%; opacity:0.4;"></div>
   <div class="wrap">
     <div class="about-grid">
       <div>
@@ -774,8 +778,10 @@
 </section>
 
 <section id="work">
-  <div class="shape shape-square outline c-cyan float" style="width:54px; height:54px; top:4%; right:10%; opacity:0.3; --r:15deg;"></div>
+  <div class="shape shape-square outline c-cyan drift" style="width:54px; height:54px; top:4%; right:10%; opacity:0.3; --r:15deg; --dx:20px;"></div>
   <div class="shape shape-ring c-magenta float-spin" style="width:70px; height:70px; bottom:6%; left:3%; opacity:0.25;"></div>
+  <div class="shape shape-triangle c-yellow drift" style="width:30px; height:28px; top:45%; left:8%; opacity:0.3; --r:-20deg; --dx:-14px;"></div>
+  <div class="shape shape-circle filled c-violet float" style="width:12px; height:12px; bottom:35%; right:22%; opacity:0.45;"></div>
   <div class="wrap">
     <div class="section-head reveal">
       <div class="eyebrow" data-i18n="work.eyebrow">Selected work</div>
@@ -1144,8 +1150,10 @@
 </section>
 
 <section id="services">
-  <div class="shape shape-triangle c-yellow float" style="width:40px; height:36px; top:8%; left:5%; opacity:0.3; --r:20deg;"></div>
+  <div class="shape shape-triangle c-yellow drift" style="width:40px; height:36px; top:8%; left:5%; opacity:0.3; --r:20deg; --dx:16px;"></div>
   <div class="shape shape-circle c-cyan float" style="width:50px; height:50px; bottom:10%; right:5%; opacity:0.3; --r:0deg;"></div>
+  <div class="shape shape-square filled c-magenta float-spin" style="width:14px; height:14px; top:50%; right:14%; opacity:0.4;"></div>
+  <div class="shape shape-ring c-violet drift" style="width:38px; height:38px; bottom:30%; left:16%; opacity:0.28; --dx:-18px;"></div>
   <div class="wrap">
     <div class="section-head reveal">
       <div class="eyebrow" data-i18n="services.eyebrow">What I do</div>
@@ -1189,7 +1197,9 @@
 
 <section id="pricing">
   <div class="shape shape-square outline c-magenta spin" style="width:44px; height:44px; top:6%; right:8%; opacity:0.3;"></div>
-  <div class="shape shape-ring c-yellow float" style="width:60px; height:60px; bottom:8%; left:6%; opacity:0.3; --r:0deg;"></div>
+  <div class="shape shape-ring c-yellow drift" style="width:60px; height:60px; bottom:8%; left:6%; opacity:0.3; --r:0deg; --dx:20px;"></div>
+  <div class="shape shape-triangle c-cyan float" style="width:26px; height:24px; top:40%; left:2%; opacity:0.3; --r:-15deg;"></div>
+  <div class="shape shape-circle filled c-violet float-spin" style="width:12px; height:12px; top:15%; right:26%; opacity:0.45;"></div>
   <div class="wrap">
     <div class="section-head reveal">
       <div class="eyebrow" data-i18n="pricing.eyebrow">Pricing</div>
@@ -1246,7 +1256,9 @@
 </section>
 
 <section id="process">
-  <div class="shape shape-triangle c-violet float" style="width:38px; height:34px; top:5%; right:6%; opacity:0.3; --r:-25deg;"></div>
+  <div class="shape shape-triangle c-violet drift" style="width:38px; height:34px; top:5%; right:6%; opacity:0.3; --r:-25deg; --dx:-16px;"></div>
+  <div class="shape shape-circle c-yellow float" style="width:34px; height:34px; bottom:10%; left:6%; opacity:0.3; --r:0deg;"></div>
+  <div class="shape shape-square filled c-cyan float-spin" style="width:14px; height:14px; bottom:35%; right:20%; opacity:0.4;"></div>
   <div class="wrap">
     <div class="section-head reveal">
       <div class="eyebrow" data-i18n="process.eyebrow">How we'll work</div>
@@ -1278,8 +1290,10 @@
 </section>
 
 <section id="contact">
-  <div class="shape shape-circle c-cyan float" style="width:56px; height:56px; top:4%; left:6%; opacity:0.3; --r:0deg;"></div>
+  <div class="shape shape-circle c-cyan drift" style="width:56px; height:56px; top:4%; left:6%; opacity:0.3; --r:0deg; --dx:18px;"></div>
   <div class="shape shape-square outline c-yellow float" style="width:40px; height:40px; bottom:6%; right:8%; opacity:0.3; --r:10deg;"></div>
+  <div class="shape shape-triangle c-magenta float-spin" style="width:24px; height:22px; top:40%; right:4%; opacity:0.32; --r:20deg;"></div>
+  <div class="shape shape-circle filled c-violet float" style="width:12px; height:12px; bottom:30%; left:16%; opacity:0.45;"></div>
   <div class="wrap">
     <div class="section-head reveal">
       <div class="eyebrow" data-i18n="contact.eyebrow">Get in touch</div>
@@ -1559,25 +1573,15 @@
   window.addEventListener('scroll', updateScrollProgress, { passive:true });
   updateScrollProgress();
 
-  // Page-transition wipe effect for in-page section navigation
-  const pageTransition = document.getElementById('pageTransition');
+  // Smooth in-page navigation with sticky-nav offset (no transition overlay)
   const navEl = document.querySelector('nav');
-  let transitionBusy = false;
 
-  function wipeNavigateTo(hash){
+  function smoothNavigateTo(hash){
     const target = document.querySelector(hash);
-    if(!target || transitionBusy) return;
-    transitionBusy = true;
-    pageTransition.style.transformOrigin = 'bottom';
-    pageTransition.classList.add('active');
-    setTimeout(()=>{
-      const navHeight = navEl ? navEl.offsetHeight : 0;
-      const targetY = target.getBoundingClientRect().top + window.pageYOffset - navHeight + 1;
-      window.scrollTo({ top: targetY, behavior:'auto' });
-      pageTransition.style.transformOrigin = 'top';
-      pageTransition.classList.remove('active');
-      setTimeout(()=>{ transitionBusy = false; }, 340);
-    }, 320);
+    if(!target) return;
+    const navHeight = navEl ? navEl.offsetHeight : 0;
+    const targetY = target.getBoundingClientRect().top + window.pageYOffset - navHeight + 1;
+    window.scrollTo({ top: targetY, behavior:'smooth' });
   }
 
   document.querySelectorAll('a[href^="#"]').forEach(link=>{
@@ -1585,7 +1589,7 @@
     if(hash.length > 1 && document.querySelector(hash)){
       link.addEventListener('click', (e)=>{
         e.preventDefault();
-        wipeNavigateTo(hash);
+        smoothNavigateTo(hash);
       });
     }
   });
