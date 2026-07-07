@@ -53,28 +53,64 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&family=Manrope:wght@400;500;700;800&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#0F0A1F;
+    --paper-fixed:#F7F3FF;
     --panel:#180F30;
     --magenta:#FF2E88;
     --yellow:#FFE100;
     --cyan:#00E5FF;
     --violet:#8C5CFF;
-    --paper:#F7F3FF;
-    --paper-dim:#BEB3DC;
+
+    --bg:#0F0A1F;
+    --bg-rgb:15,10,31;
+    --text:#F7F3FF;
+    --text-dim:#BEB3DC;
+    --border-subtle: rgba(255,255,255,0.08);
+    --border-soft: rgba(255,255,255,0.1);
+    --border-mid: rgba(255,255,255,0.15);
+    --border-strong: rgba(255,255,255,0.2);
+    --border-dash: rgba(255,255,255,0.25);
+    --input-bg: rgba(255,255,255,0.04);
+
     --display:'Archivo Black', sans-serif;
     --body:'Manrope', sans-serif;
     --mono:'Space Mono', monospace;
+    --display-ar:'Cairo', sans-serif;
+    --body-ar:'Cairo', sans-serif;
+    --mono-ar:'Cairo', sans-serif;
   }
+
+  [data-theme="light"]{
+    --panel:#FFFFFF;
+    --bg:#F5F2FC;
+    --bg-rgb:245,242,252;
+    --text:#150E2A;
+    --text-dim:#5B5270;
+    --border-subtle: rgba(15,10,31,0.10);
+    --border-soft: rgba(15,10,31,0.12);
+    --border-mid: rgba(15,10,31,0.16);
+    --border-strong: rgba(15,10,31,0.18);
+    --border-dash: rgba(15,10,31,0.22);
+    --input-bg: rgba(15,10,31,0.035);
+  }
+
+  [data-lang="ar"]{
+    --display: var(--display-ar);
+    --body: var(--body-ar);
+    --mono: var(--mono-ar);
+  }
+
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
   body{
-    background:var(--ink);
-    color:var(--paper);
+    background:var(--bg);
+    color:var(--text);
     font-family:var(--body);
     overflow-x:hidden;
+    transition:background .3s ease, color .3s ease;
   }
   a{color:inherit; text-decoration:none;}
   img{max-width:100%; display:block;}
@@ -95,9 +131,9 @@
   /* ---------- NAV ---------- */
   nav{
     position:sticky; top:0; z-index:50;
-    background:rgba(15,10,31,0.85);
+    background:rgba(var(--bg-rgb),0.85);
     backdrop-filter:blur(10px);
-    border-bottom:1px solid rgba(255,255,255,0.08);
+    border-bottom:1px solid var(--border-subtle);
   }
   nav .wrap{display:flex; align-items:center; justify-content:space-between; height:76px;}
   .logo{
@@ -129,10 +165,27 @@
     white-space:nowrap;
   }
   .nav-cta:hover{transform:translate(-2px,-2px); box-shadow:5px 5px 0 var(--yellow);}
-  .mobile-toggle{display:none; background:none; border:none; color:var(--paper); font-size:1.6rem; cursor:pointer;}
+  .mobile-toggle{display:none; background:none; border:none; color:var(--text); font-size:1.6rem; cursor:pointer;}
+
+  .nav-utils{display:flex; align-items:center; gap:10px; margin-right:16px;}
+  [dir="rtl"] .nav-utils{ margin-right:0; margin-left:16px; }
+  .util-btn{
+    display:flex; align-items:center; justify-content:center;
+    background:transparent; border:1px solid var(--border-strong); color:var(--text);
+    border-radius:8px; cursor:pointer; transition:border-color .2s, color .2s, transform .15s;
+    font-family:var(--mono); font-size:0.75rem; font-weight:700;
+  }
+  #langToggle{ padding:8px 12px; letter-spacing:0.5px; }
+  .util-btn:hover{ border-color:var(--yellow); color:var(--yellow); transform:translateY(-1px); }
+  .util-btn-icon{ width:36px; height:36px; padding:0; flex-shrink:0; }
+  .util-btn-icon svg{ width:18px; height:18px; }
+  .icon-sun{ display:none; }
+  .icon-moon{ display:block; }
+  [data-theme="light"] .icon-sun{ display:block; }
+  [data-theme="light"] .icon-moon{ display:none; }
   .hamburger{ position:relative; width:24px; height:18px; display:inline-block; }
   .hamburger span{
-    position:absolute; left:0; width:100%; height:2px; background:var(--paper);
+    position:absolute; left:0; width:100%; height:2px; background:var(--text);
     border-radius:2px; transition:transform .3s ease, opacity .3s ease, top .3s ease;
   }
   .hamburger span:nth-child(1){ top:0; }
@@ -167,7 +220,7 @@
     margin:6px 0;
   }
   .hero p.lede{
-    margin-top:24px; font-size:1.1rem; color:var(--paper-dim);
+    margin-top:24px; font-size:1.1rem; color:var(--text-dim);
     max-width:480px; line-height:1.6;
   }
   .hero-ctas{display:flex; gap:16px; margin-top:36px; flex-wrap:wrap;}
@@ -189,27 +242,27 @@
     font-family:var(--display); font-size:0.9rem;
     background:var(--magenta); color:var(--ink);
     padding:16px 30px; border-radius:10px;
-    box-shadow:4px 4px 0 var(--paper);
+    box-shadow:4px 4px 0 var(--text);
     transition:transform .15s, box-shadow .15s;
   }
-  .btn-primary:hover{transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--paper);}
+  .btn-primary:hover{transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--text);}
   .btn-ghost{
     font-family:var(--display); font-size:0.9rem;
-    border:2px solid var(--paper); color:var(--paper);
+    border:2px solid var(--text); color:var(--text);
     padding:14px 28px; border-radius:10px;
     transition:background .2s, color .2s;
   }
-  .btn-ghost:hover{background:var(--paper); color:var(--ink);}
+  .btn-ghost:hover{background:var(--text); color:var(--bg);}
   .btn-whatsapp{
     font-family:var(--display); font-size:0.9rem;
     background:#25D366; color:var(--ink);
     padding:16px 30px; border-radius:10px;
-    box-shadow:4px 4px 0 var(--paper);
+    box-shadow:4px 4px 0 var(--text);
     transition:transform .15s, box-shadow .15s;
     display:inline-flex; align-items:center; gap:10px;
     position:relative;
   }
-  .btn-whatsapp:hover{transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--paper);}
+  .btn-whatsapp:hover{transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--text);}
   .btn-whatsapp svg{width:18px; height:18px; flex-shrink:0; position:relative; z-index:1;}
   .btn-whatsapp span{position:relative; z-index:1;}
   .btn-whatsapp::after{
@@ -232,7 +285,7 @@
     background:var(--panel);
   }
   .thumb-card img{width:100%; height:150px; object-fit:cover; display:block;}
-  .thumb-card .meta{padding:10px 14px; font-family:var(--mono); font-size:0.68rem; color:var(--paper-dim);}
+  .thumb-card .meta{padding:10px 14px; font-family:var(--mono); font-size:0.68rem; color:var(--text-dim);}
 
   /* Entrance (drop + settle) then a continuous gentle float, both driven off --rot so each card keeps its own tilt */
   @keyframes cardIn{
@@ -291,39 +344,39 @@
   .section-head .eyebrow{color:var(--magenta);}
   .section-head .eyebrow::before{background:var(--magenta);}
   h2{font-family:var(--display); font-size:clamp(1.9rem,3vw,2.6rem); line-height:1.1;}
-  .section-head p{color:var(--paper-dim); margin-top:16px; font-size:1.05rem; line-height:1.6;}
+  .section-head p{color:var(--text-dim); margin-top:16px; font-size:1.05rem; line-height:1.6;}
 
   /* ---------- ABOUT ---------- */
   .about-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:56px; align-items:start;}
-  .about-grid p{color:var(--paper-dim); font-size:1.05rem; line-height:1.7; margin-bottom:16px;}
+  .about-grid p{color:var(--text-dim); font-size:1.05rem; line-height:1.7; margin-bottom:16px;}
   .about-tags{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px;}
   .about-tags span{
     font-family:var(--mono); font-size:0.75rem; padding:8px 14px;
-    border:1px solid rgba(255,255,255,0.2); border-radius:999px; color:var(--paper-dim);
+    border:1px solid var(--border-strong); border-radius:999px; color:var(--text-dim);
   }
   .turnaround{
     background:var(--panel); border-radius:16px; padding:26px;
-    border:1px solid rgba(255,255,255,0.08);
+    border:1px solid var(--border-subtle);
   }
   .turnaround h3{font-size:1rem; margin-bottom:16px; font-family:var(--display); color:var(--yellow);}
-  .turnaround .row{display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px dashed rgba(255,255,255,0.1); font-size:0.92rem;}
+  .turnaround .row{display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px dashed var(--border-soft); font-size:0.92rem;}
   .turnaround .row:last-child{border-bottom:none;}
-  .turnaround .row b{color:var(--paper); font-weight:800;}
+  .turnaround .row b{color:var(--text); font-weight:800;}
 
   /* ---------- WORK GRID ---------- */
   .filter-row{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:36px;}
   .filter-btn{
     font-family:var(--mono); font-size:0.8rem; padding:9px 18px;
-    border:1px solid rgba(255,255,255,0.2); border-radius:999px; color:var(--paper-dim);
+    border:1px solid var(--border-strong); border-radius:999px; color:var(--text-dim);
     cursor:pointer; background:transparent; transition:all .2s;
   }
   .filter-btn.active, .filter-btn:hover{
-    background:var(--paper); color:var(--ink); border-color:var(--paper);
+    background:var(--text); color:var(--bg); border-color:var(--text);
   }
   .grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:24px;}
   .card{
     border-radius:16px; overflow:hidden; cursor:pointer;
-    border:1px solid rgba(255,255,255,0.08);
+    border:1px solid var(--border-subtle);
     background:var(--panel);
     transition:transform .25s ease, box-shadow .25s ease;
   }
@@ -333,25 +386,25 @@
   .card:hover .art img{transform:scale(1.06);}
   .card .art .tag{
     position:absolute; top:12px; left:12px; font-family:var(--mono); font-size:0.65rem;
-    background:var(--ink); color:var(--paper); padding:4px 10px; border-radius:999px;
+    background:var(--ink); color:var(--paper-fixed); padding:4px 10px; border-radius:999px;
     z-index:2;
   }
   .card .art .hover-view{
     position:absolute; inset:0; background:rgba(15,10,31,0.75);
     display:flex; align-items:center; justify-content:center;
-    font-family:var(--display); font-size:0.9rem; color:var(--paper);
+    font-family:var(--display); font-size:0.9rem; color:var(--paper-fixed);
     opacity:0; transition:opacity .2s; z-index:2;
   }
   .card:hover .hover-view{opacity:1;}
   .card .info{padding:16px 18px;}
   .card .info h3{font-size:1rem; font-family:var(--body); font-weight:800;}
-  .card .info p{font-family:var(--mono); font-size:0.72rem; color:var(--paper-dim); margin-top:4px;}
+  .card .info p{font-family:var(--mono); font-size:0.72rem; color:var(--text-dim); margin-top:4px;}
 
   /* ---------- SERVICES ---------- */
   .services-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
   .service{
     background:var(--panel); border-radius:16px; padding:28px 22px;
-    border:1px solid rgba(255,255,255,0.08);
+    border:1px solid var(--border-subtle);
     transition:transform .2s, border-color .2s;
   }
   .service:hover{transform:translateY(-4px); border-color:var(--yellow);}
@@ -369,19 +422,51 @@
   .service:nth-child(6n+5) .icon{background:var(--yellow);}
   .service:nth-child(6n+6) .icon{background:var(--cyan);}
   .service h3{font-size:1.05rem; margin-bottom:10px;}
-  .service p{color:var(--paper-dim); font-size:0.9rem; line-height:1.55;}
+  .service p{color:var(--text-dim); font-size:0.9rem; line-height:1.55;}
   .quote-note{
     margin-top:30px; display:inline-flex; align-items:center; gap:12px;
-    background:var(--panel); border:1px solid rgba(255,255,255,0.1);
+    background:var(--panel); border:1px solid var(--border-soft);
     padding:16px 22px; border-radius:12px; font-family:var(--mono); font-size:0.85rem;
     color:var(--yellow);
   }
+
+  /* ---------- PRICING ---------- */
+  .pricing-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:20px;}
+  .price-card{
+    background:var(--panel); border-radius:20px; padding:34px 24px 26px;
+    border:1px solid var(--border-subtle); position:relative;
+    display:flex; flex-direction:column; text-align:center;
+    transition:transform .2s ease, border-color .2s ease;
+  }
+  .price-card:hover{ transform:translateY(-6px); border-color:var(--yellow); }
+  .price-card.featured{ border-color:var(--magenta); }
+  .price-card .badge{
+    position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+    background:var(--yellow); color:var(--ink); font-family:var(--display); font-size:0.68rem;
+    padding:6px 16px; border-radius:999px; white-space:nowrap; box-shadow:3px 3px 0 var(--ink);
+  }
+  .price-card h3{font-family:var(--display); font-size:1.05rem; margin-top:6px;}
+  .price-card .price-row{display:flex; align-items:baseline; justify-content:center; gap:8px; margin:16px 0 4px; flex-wrap:wrap;}
+  .price-card .price-old{ font-family:var(--mono); font-size:0.9rem; color:var(--text-dim); text-decoration:line-through; }
+  .price-card .price-new{ font-family:var(--display); font-size:1.8rem; color:var(--yellow); }
+  .price-card .price-unit{ font-family:var(--mono); font-size:0.78rem; color:var(--text-dim); display:block; margin-bottom:6px; }
+  .price-card p.desc{ color:var(--text-dim); font-size:0.86rem; line-height:1.5; margin-top:10px; flex-grow:1; }
+  .price-card .price-cta{
+    margin-top:20px; text-align:center; font-family:var(--display); font-size:0.78rem;
+    background:var(--magenta); color:var(--ink); padding:12px; border-radius:8px;
+    transition:transform .15s ease; display:block;
+  }
+  .price-card .price-cta:hover{ transform:translateY(-2px); }
+  .pricing-note{
+    margin-top:30px; text-align:center; font-family:var(--mono); font-size:0.85rem; color:var(--text-dim);
+  }
+  .pricing-note a{ color:var(--yellow); text-decoration:underline; }
 
   /* ---------- PROCESS ---------- */
   .process{display:grid; grid-template-columns:repeat(4,1fr); gap:0; position:relative;}
   .process::before{
     content:""; position:absolute; top:26px; left:5%; right:5%; height:2px;
-    background:repeating-linear-gradient(90deg, rgba(255,255,255,0.25) 0 8px, transparent 8px 16px);
+    background:repeating-linear-gradient(90deg, var(--border-dash) 0 8px, transparent 8px 16px);
     z-index:0;
   }
   .step{position:relative; z-index:1; padding-right:20px;}
@@ -393,7 +478,7 @@
     margin-bottom:18px;
   }
   .step h3{font-size:1.05rem; margin-bottom:8px;}
-  .step p{color:var(--paper-dim); font-size:0.88rem; line-height:1.55;}
+  .step p{color:var(--text-dim); font-size:0.88rem; line-height:1.55;}
 
   /* ---------- CTA / CONTACT ---------- */
   .cta-band{
@@ -403,9 +488,9 @@
   .cta-band h2{color:var(--ink); font-size:clamp(1.8rem,3.4vw,2.6rem);}
   .cta-band p{color:rgba(15,10,31,0.75); margin-top:14px; font-size:1.05rem;}
   .cta-band .hero-ctas{justify-content:center; margin-top:30px;}
-  .cta-band .btn-primary{background:var(--ink); color:var(--paper); box-shadow:4px 4px 0 rgba(15,10,31,0.4);}
+  .cta-band .btn-primary{background:var(--ink); color:var(--paper-fixed); box-shadow:4px 4px 0 rgba(15,10,31,0.4);}
   .cta-band .btn-ghost{border-color:var(--ink); color:var(--ink);}
-  .cta-band .btn-ghost:hover{background:var(--ink); color:var(--paper);}
+  .cta-band .btn-ghost:hover{background:var(--ink); color:var(--paper-fixed);}
   .cta-band .btn-whatsapp{box-shadow:4px 4px 0 rgba(15,10,31,0.4);}
   .contact-detail{
     margin-top:26px; display:flex; gap:28px; justify-content:center; flex-wrap:wrap;
@@ -418,19 +503,19 @@
   .contact-grid .cta-band{display:flex; flex-direction:column; justify-content:center;}
   .contact-form{
     background:var(--panel); border-radius:24px; padding:44px;
-    border:1px solid rgba(255,255,255,0.08);
+    border:1px solid var(--border-subtle);
   }
   .contact-form h3{font-family:var(--display); font-size:1.3rem; margin-bottom:8px;}
-  .contact-form .sub{color:var(--paper-dim); font-size:0.9rem; margin-bottom:26px;}
+  .contact-form .sub{color:var(--text-dim); font-size:0.9rem; margin-bottom:26px;}
   .form-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
   .form-group{margin-bottom:18px;}
   .form-group label{
     display:block; font-family:var(--mono); font-size:0.7rem; text-transform:uppercase;
-    letter-spacing:1px; color:var(--paper-dim); margin-bottom:8px;
+    letter-spacing:1px; color:var(--text-dim); margin-bottom:8px;
   }
   .form-group input, .form-group select, .form-group textarea{
-    width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.15);
-    border-radius:10px; padding:12px 14px; color:var(--paper); font-family:var(--body);
+    width:100%; background:var(--input-bg); border:1px solid var(--border-mid);
+    border-radius:10px; padding:12px 14px; color:var(--text); font-family:var(--body);
     font-size:0.92rem;
   }
   .form-group textarea{resize:vertical; min-height:110px;}
@@ -455,7 +540,7 @@
   .form-status.success{color:#0F0A1F; background:#7CFFB2;}
   .form-status.error{color:#0F0A1F; background:#FF9A9A;}
 
-  footer{padding:50px 0 40px; border-top:1px solid rgba(255,255,255,0.08);}
+  footer{padding:50px 0 40px; border-top:1px solid var(--border-subtle);}
   footer .wrap{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
   footer .social{display:flex; gap:22px; font-family:var(--mono); font-size:0.85rem;}
   footer .social a{position:relative; transition:color .2s;}
@@ -465,7 +550,7 @@
   }
   footer .social a:hover{color:var(--yellow);}
   footer .social a:hover::after{width:100%;}
-  footer .fine{font-family:var(--mono); font-size:0.75rem; color:var(--paper-dim);}
+  footer .fine{font-family:var(--mono); font-size:0.75rem; color:var(--text-dim);}
 
   /* ---------- MODAL ---------- */
   .modal-overlay{
@@ -480,7 +565,7 @@
   }
   .modal{
     background:var(--panel); border-radius:20px; max-width:560px; width:100%;
-    border:1px solid rgba(255,255,255,0.1); overflow:hidden;
+    border:1px solid var(--border-soft); overflow:hidden;
     max-height:90vh; overflow-y:auto;
     transform:scale(.92); opacity:0;
     transition:transform .3s cubic-bezier(.34,1.56,.64,1), opacity .25s ease;
@@ -494,17 +579,17 @@
     background:var(--yellow); color:var(--ink); padding:4px 12px; border-radius:999px; margin-bottom:14px;
   }
   .modal .body h3{font-family:var(--display); font-size:1.3rem; margin-bottom:10px;}
-  .modal .body p{color:var(--paper-dim); font-size:0.92rem; line-height:1.6; margin:0 0 20px;}
+  .modal .body p{color:var(--text-dim); font-size:0.92rem; line-height:1.6; margin:0 0 20px;}
   .modal .body .meta-row{font-family:var(--mono); font-size:0.75rem; color:var(--cyan); margin-bottom:18px;}
   .modal-close{
-    font-family:var(--mono); font-size:0.85rem; background:none; border:1px solid var(--paper-dim);
-    color:var(--paper); padding:10px 20px; border-radius:8px; cursor:pointer;
+    font-family:var(--mono); font-size:0.85rem; background:none; border:1px solid var(--text-dim);
+    color:var(--text); padding:10px 20px; border-radius:8px; cursor:pointer;
   }
   .modal-close:hover{border-color:var(--yellow); color:var(--yellow);}
 
   @media (max-width:900px){
-    .navlinks{position:fixed; top:76px; left:0; right:0; background:var(--ink); flex-direction:column;
-      padding:24px 32px; gap:20px; border-bottom:1px solid rgba(255,255,255,0.08);
+    .navlinks{position:fixed; top:76px; left:0; right:0; background:var(--bg); flex-direction:column;
+      padding:24px 32px; gap:20px; border-bottom:1px solid var(--border-subtle);
       transform:translateY(-120%); transition:transform .25s ease; z-index:40;}
     .navlinks.open{transform:translateY(0);}
     .mobile-toggle{display:block;}
@@ -515,12 +600,12 @@
     .thumb-2{right:90px;}
     .thumb-3{right:-20px;}
     .about-grid{grid-template-columns:1fr;}
-    .grid, .services-grid{grid-template-columns:repeat(2,1fr);}
+    .grid, .services-grid, .pricing-grid{grid-template-columns:repeat(2,1fr);}
     .process{grid-template-columns:repeat(2,1fr); row-gap:32px;}
     .process::before{display:none;}
   }
   @media (max-width:560px){
-    .grid, .services-grid, .process{grid-template-columns:1fr;}
+    .grid, .services-grid, .process, .pricing-grid{grid-template-columns:1fr;}
     .cta-band{padding:44px 24px;}
     .contact-grid{grid-template-columns:1fr;}
     .contact-form{padding:30px 24px;}
@@ -550,31 +635,39 @@
   <div class="wrap">
     <div class="logo"><span class="dot"></span>3BSI PHOTO</div>
     <div class="navlinks" id="navLinks">
-      <a href="#work">Work</a>
-      <a href="#services">Services</a>
-      <a href="#process">Process</a>
-      <a href="#contact">Contact</a>
+      <a href="#work" data-i18n="nav.work">Work</a>
+      <a href="#services" data-i18n="nav.services">Services</a>
+      <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+      <a href="#process" data-i18n="nav.process">Process</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>
+    </div>
+    <div class="nav-utils">
+      <button class="util-btn" id="langToggle" aria-label="Switch language">AR</button>
+      <button class="util-btn util-btn-icon" id="themeToggle" aria-label="Toggle light and dark mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
     </div>
     <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
       <span class="hamburger"><span></span><span></span><span></span></span>
     </button>
-    <a href="#contact" class="nav-cta">Get a Quote</a>
+    <a href="#contact" class="nav-cta" data-i18n="nav.cta">Get a Quote</a>
   </div>
 </nav>
 
 <header class="hero">
   <div class="wrap">
     <div>
-      <div class="eyebrow">YouTube Thumbnail Design</div>
-      <h1>Stop the scroll<br>with a<span class="hl">thumbnail</span><br>that hits.</h1>
-      <p class="lede">I create high-converting YouTube thumbnails that capture attention and increase click-through rates — matched to your brand and content style.</p>
+      <div class="eyebrow" data-i18n="hero.eyebrow">YouTube Thumbnail Design</div>
+      <h1 data-i18n-html="hero.title">Stop the scroll<br>with a<span class="hl">thumbnail</span><br>that hits.</h1>
+      <p class="lede" data-i18n="hero.lede">I create high-converting YouTube thumbnails that capture attention and increase click-through rates — matched to your brand and content style.</p>
       <div class="hero-ctas">
-        <a href="#work" class="btn-primary">See the work</a>
+        <a href="#work" class="btn-primary" data-i18n="hero.ctaWork">See the work</a>
         <a href="https://wa.me/201092545695?text=Hi%20Ahmed%2C%20I%27d%20like%20a%20quote%20for%20a%20thumbnail" target="_blank" rel="noopener" class="btn-whatsapp">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.92 0-2.65-1.03-5.14-2.9-7.01A9.865 9.865 0 0 0 12.04 2zm5.8 14.02c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.15-4.9-4.34-.14-.19-1.17-1.56-1.17-2.98 0-1.42.74-2.11 1-2.4.27-.29.58-.36.78-.36.19 0 .39 0 .56.01.18.01.42-.07.65.5.24.58.82 2 .9 2.14.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.19-.27.37-.22.62-.13.26.09 1.63.77 1.91.91.28.14.47.21.53.33.07.12.07.68-.17 1.36z"/></svg>
-          WhatsApp Me
+          <span data-i18n="common.whatsapp">WhatsApp Me</span>
         </a>
-        <a href="#contact" class="btn-ghost">Hire me</a>
+        <a href="#contact" class="btn-ghost" data-i18n="hero.ctaHire">Hire me</a>
       </div>
     </div>
     <div class="hero-visual">
@@ -598,23 +691,23 @@
   <div class="wrap">
     <div class="about-grid">
       <div>
-        <div class="eyebrow">About</div>
-        <h2>Ahmed Abdelsalam</h2>
-        <p>I specialize in designing professional YouTube thumbnails. My goal is to create visually striking designs that maximize clicks while matching each creator's branding and content style.</p>
-        <p>I focus on clean composition, strong visual hierarchy, and effective color usage — every thumbnail is built to work at a glance, at any size.</p>
+        <div class="eyebrow" data-i18n="about.eyebrow">About</div>
+        <h2 data-ar="أحمد عبدالسلام">Ahmed Abdelsalam</h2>
+        <p data-i18n="about.p1">I specialize in designing professional YouTube thumbnails. My goal is to create visually striking designs that maximize clicks while matching each creator's branding and content style.</p>
+        <p data-i18n="about.p2">I focus on clean composition, strong visual hierarchy, and effective color usage — every thumbnail is built to work at a glance, at any size.</p>
         <div class="about-tags">
-          <span>Adobe Photoshop</span>
-          <span>AI-Assisted Editing</span>
-          <span>Photo Manipulation</span>
-          <span>Sports &amp; Gaming Content</span>
+          <span data-i18n="about.tag1">Adobe Photoshop</span>
+          <span data-i18n="about.tag2">AI-Assisted Editing</span>
+          <span data-i18n="about.tag3">Photo Manipulation</span>
+          <span data-i18n="about.tag4">Sports &amp; Gaming Content</span>
         </div>
       </div>
       <div class="turnaround">
-        <h3>Turnaround</h3>
-        <div class="row"><span>Standard Delivery</span><b>24–48 Hours</b></div>
-        <div class="row"><span>Rush Delivery</span><b>Available on request</b></div>
-        <div class="row"><span>Revisions</span><b>Included</b></div>
-        <div class="row"><span>Pricing</span><b>Contact for a Custom Quote</b></div>
+        <h3 data-i18n="about.turnaround">Turnaround</h3>
+        <div class="row"><span data-i18n="about.standard">Standard Delivery</span><b data-i18n="about.standardVal">24–48 Hours</b></div>
+        <div class="row"><span data-i18n="about.rush">Rush Delivery</span><b data-i18n="about.rushVal">Available on request</b></div>
+        <div class="row"><span data-i18n="about.revisions">Revisions</span><b data-i18n="about.revisionsVal">Included</b></div>
+        <div class="row"><span data-i18n="about.pricingLabel">Pricing</span><b data-i18n="about.pricingVal">From 200 EGP</b></div>
       </div>
     </div>
   </div>
@@ -623,18 +716,18 @@
 <section id="work">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">Selected work</div>
-      <h2>Built to be clicked.</h2>
-      <p>A selection of YouTube thumbnails and promotional graphics — each one designed around one job: making someone stop scrolling.</p>
+      <div class="eyebrow" data-i18n="work.eyebrow">Selected work</div>
+      <h2 data-i18n="work.title">Built to be clicked.</h2>
+      <p data-i18n="work.subtitle">A selection of YouTube thumbnails and promotional graphics — each one designed around one job: making someone stop scrolling.</p>
     </div>
 
     <div class="filter-row">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="sports">Sports</button>
-      <button class="filter-btn" data-filter="gaming">Gaming</button>
-      <button class="filter-btn" data-filter="entertainment">Entertainment</button>
-      <button class="filter-btn" data-filter="ads">Ads &amp; Products</button>
-      <button class="filter-btn" data-filter="educational">Educational</button>
+      <button class="filter-btn active" data-filter="all" data-i18n="filter.all">All</button>
+      <button class="filter-btn" data-filter="sports" data-i18n="filter.sports">Sports</button>
+      <button class="filter-btn" data-filter="gaming" data-i18n="filter.gaming">Gaming</button>
+      <button class="filter-btn" data-filter="entertainment" data-i18n="filter.entertainment">Entertainment</button>
+      <button class="filter-btn" data-filter="ads" data-i18n="filter.ads">Ads &amp; Products</button>
+      <button class="filter-btn" data-filter="educational" data-i18n="filter.educational">Educational</button>
     </div>
 
     <div class="grid" id="grid">
@@ -643,299 +736,345 @@
         data-img="assets/img/ucl-matchday-01.webp"
         data-title="Champions League Matchday Reaction"
         data-desc="A UEFA Champions League reaction thumbnail built around a host portrait, club crests, and the tournament trophy, composited to feel like a live broadcast moment."
+        data-desc-ar="صورة مصغّرة لردة فعل على مباراة في دوري أبطال أوروبا، تجمع بين صورة المقدم وشعارات الأندية وكأس البطولة بتصميم يحاكي أجواء البث المباشر."
+        data-title-ar="ردة فعل الجولة - دوري الأبطال"
         data-meta="YouTube · Sports Commentary">
         <div class="art">
-          <span class="tag">Sports</span>
+          <span class="tag" data-i18n="filter.sports">Sports</span>
           <img src="assets/img/ucl-matchday-01-thumb.webp" alt="Champions League matchday reaction thumbnail" width="500" height="281">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Champions League Matchday Reaction</h3><p>YouTube · Photoshop + AI</p></div>
+        <div class="info"><h3 data-ar="ردة فعل الجولة - دوري الأبطال">Champions League Matchday Reaction</h3><p>YouTube · Photoshop + AI</p></div>
       </div>
 
       <div class="card reveal" data-cat="sports"
         data-img="assets/img/el-clasico-panel.webp"
         data-title="El Clásico Preview — Podcast Panel"
         data-desc="A four-way split-panel thumbnail for a football podcast episode previewing El Clásico, using diagonal frames and club crests to keep each host distinct while reading as one composition."
+        data-desc-ar="صورة مصغّرة مقسّمة لأربعة مقدمين لحلقة بودكاست رياضي عن الكلاسيكو، باستخدام إطارات مائلة وشعارات الأندية لإبراز كل مقدم مع الحفاظ على تناسق التصميم."
+        data-title-ar="عرض الكلاسيكو — بودكاست جماعي"
         data-meta="YouTube · Football Podcast">
         <div class="art">
-          <span class="tag">Sports</span>
+          <span class="tag" data-i18n="filter.sports">Sports</span>
           <img src="assets/img/el-clasico-panel-thumb.webp" alt="El Clasico podcast panel thumbnail" width="500" height="281">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>El Clásico Preview — Podcast Panel</h3><p>YouTube · Photoshop</p></div>
+        <div class="info"><h3 data-ar="عرض الكلاسيكو — بودكاست جماعي">El Clásico Preview — Podcast Panel</h3><p>YouTube · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="sports"
         data-img="assets/img/guess-the-player.webp"
         data-title="Guess the Player — Interactive Thumbnail"
         data-desc="A comic-book styled thumbnail for a guessing-game format, using a mystery silhouette and bold Arabic typography to drive curiosity clicks."
+        data-desc-ar="صورة مصغّرة بأسلوب القصص المصورة لفقرة تخمين، تستخدم ظلاً غامضاً وخطوطاً عربية جريئة لتحفيز الفضول والنقر."
+        data-title-ar="خمن اللاعب"
         data-meta="YouTube · Interactive / Quiz Format">
         <div class="art">
-          <span class="tag">Sports</span>
+          <span class="tag" data-i18n="filter.sports">Sports</span>
           <img src="assets/img/guess-the-player-thumb.webp" alt="Guess the player interactive thumbnail" width="500" height="281">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Guess the Player</h3><p>YouTube · Photoshop</p></div>
+        <div class="info"><h3 data-ar="خمن اللاعب">Guess the Player</h3><p>YouTube · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="gaming"
         data-img="assets/img/horror-game-reaction.webp"
         data-title="Horror Game Reaction Thumbnail"
         data-desc="A high-contrast horror thumbnail pairing an exaggerated reaction shot with a menacing in-game creature, using warm rim lighting to separate the subject from a dark background."
+        data-desc-ar="صورة مصغّرة رعب عالية التباين تجمع بين ردة فعل مبالغ فيها ومخلوق مرعب من داخل اللعبة، مع إضاءة جانبية دافئة لفصل الشخصية عن الخلفية الداكنة."
+        data-title-ar="ردة فعل رعب"
         data-meta="YouTube · Horror Gaming">
         <div class="art">
-          <span class="tag">Gaming</span>
+          <span class="tag" data-i18n="filter.gaming">Gaming</span>
           <img src="assets/img/horror-game-reaction-thumb.webp" alt="Horror game reaction thumbnail" width="500" height="281">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Horror Game Reaction</h3><p>YouTube · Photoshop</p></div>
+        <div class="info"><h3 data-ar="ردة فعل رعب">Horror Game Reaction</h3><p>YouTube · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="sports"
         data-img="assets/img/ucl-matchday-03.webp"
         data-title="Champions League Matchday 3 Recap"
         data-desc="A bold red-toned recap thumbnail for a Champions League matchday, layering rival club shirts and the trophy around a central host portrait for instant recognition."
+        data-desc-ar="صورة مصغّرة بتدرجات حمراء جريئة لملخص جولة من دوري الأبطال، تجمع بين قمصان الأندية المتنافسة والكأس حول صورة المقدم لتمييز فوري."
+        data-title-ar="الجولة الثالثة — دوري الأبطال"
         data-meta="YouTube · Sports Commentary">
         <div class="art">
-          <span class="tag">Sports</span>
+          <span class="tag" data-i18n="filter.sports">Sports</span>
           <img src="assets/img/ucl-matchday-03-thumb.webp" alt="Champions League matchday 3 thumbnail" width="500" height="281">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Champions League Matchday 3</h3><p>YouTube · Photoshop + AI</p></div>
+        <div class="info"><h3 data-ar="الجولة الثالثة — دوري الأبطال">Champions League Matchday 3</h3><p>YouTube · Photoshop + AI</p></div>
       </div>
 
       <div class="card reveal" data-cat="sports"
         data-img="assets/img/el-clasico-showdown.webp"
         data-title="El Clásico Showdown"
         data-desc="A moody blue-and-purple El Clásico thumbnail built around a shocked-reaction host flanked by two rival stars, with bold outlined Arabic type anchoring the composition."
+        data-desc-ar="صورة مصغّرة بألوان زرقاء وبنفسجية لمباراة الكلاسيكو، تعرض مقدماً بردة فعل صادمة بين نجمين من الفريقين المتنافسين، مع خط عربي جريء بارز."
+        data-title-ar="مواجهة الكلاسيكو"
         data-meta="YouTube · Football Commentary">
         <div class="art">
-          <span class="tag">Sports</span>
+          <span class="tag" data-i18n="filter.sports">Sports</span>
           <img src="assets/img/el-clasico-showdown-thumb.webp" alt="El Clasico showdown thumbnail" width="500" height="281">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>El Clásico Showdown</h3><p>YouTube · Photoshop</p></div>
+        <div class="info"><h3 data-ar="مواجهة الكلاسيكو">El Clásico Showdown</h3><p>YouTube · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="sports"
         data-img="assets/img/guess-the-team.webp"
         data-title="Guess the Team — Podcast Thumbnail"
         data-desc="A comic-panel layout for a football podcast guessing segment, using four bright, individually framed host shots around a central mystery mark to build a consistent series look."
+        data-desc-ar="تصميم بأسلوب لوحات القصص المصورة لفقرة تخمين في بودكاست رياضي، بأربع صور مقدمين ملونة ومؤطرة بشكل فردي حول علامة غموض مركزية لبناء هوية مرئية موحدة للسلسلة."
+        data-title-ar="خمن الفريق"
         data-meta="YouTube · Football Podcast">
         <div class="art">
-          <span class="tag">Sports</span>
+          <span class="tag" data-i18n="filter.sports">Sports</span>
           <img src="assets/img/guess-the-team-thumb.webp" alt="Guess the team podcast thumbnail" width="500" height="281">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Guess the Team</h3><p>YouTube · Photoshop</p></div>
+        <div class="info"><h3 data-ar="خمن الفريق">Guess the Team</h3><p>YouTube · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="educational"
         data-img="assets/img/course-apply-now.webp"
         data-title="Course Enrollment Promo — 3BSI Digital Academy"
         data-desc="A vertical enrollment ad for a Photoshop and digital marketing course, using a sunset beach scene, layered typography, and platform icons to communicate the course's practical focus."
+        data-desc-ar="إعلان تسجيل عمودي لكورس فوتوشوب وتسويق رقمي، يستخدم مشهد شاطئ عند الغروب وخطوطاً متراكبة وأيقونات منصات لإبراز الطابع العملي للكورس."
+        data-title-ar="إعلان التسجيل بالكورس"
         data-meta="Social Media Ad · Digital Academy">
         <div class="art">
-          <span class="tag">Educational</span>
+          <span class="tag" data-i18n="filter.educational">Educational</span>
           <img src="assets/img/course-apply-now-thumb.webp" alt="Course enrollment promotional graphic" width="500" height="625">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Course Enrollment Promo</h3><p>Social Ad · Photoshop</p></div>
+        <div class="info"><h3 data-ar="إعلان التسجيل بالكورس">Course Enrollment Promo</h3><p>Social Ad · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="educational"
         data-img="assets/img/course-ramadan-edition.webp"
         data-title="Course Description Post — Ramadan Edition"
         data-desc="A retro-toned course description graphic built for a seasonal Ramadan promotion, pairing a warm orange palette and textured patterns with a clear discount callout."
+        data-desc-ar="تصميم وصف كورس بطابع كلاسيكي لعرض رمضاني موسمي، يجمع بين ألوان برتقالية دافئة وأنماط مزخرفة مع إبراز واضح لنسبة الخصم."
+        data-title-ar="وصف الكورس — نسخة رمضان"
         data-meta="Social Media Post · Digital Academy">
         <div class="art">
-          <span class="tag">Educational</span>
+          <span class="tag" data-i18n="filter.educational">Educational</span>
           <img src="assets/img/course-ramadan-edition-thumb.webp" alt="Course description Ramadan edition graphic" width="500" height="500">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Course Description — Ramadan Edition</h3><p>Social Post · Photoshop</p></div>
+        <div class="info"><h3 data-ar="وصف الكورس — نسخة رمضان">Course Description — Ramadan Edition</h3><p>Social Post · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="ads"
         data-img="assets/img/ytarabia-banner.webp"
         data-title="YTArabia — YouTube Channel Banner"
         data-desc="A cyberpunk-themed channel banner combining a moody host portrait, a retro-futuristic skyline, and neon lightning accents to establish a bold visual identity for the YTArabia brand."
+        data-desc-ar="بانر قناة بطابع السايبربانك يجمع بين صورة مقدم بإضاءة خافتة وأفق مدينة مستقبلي كلاسيكي وإضاءات نيون على شكل برق، لبناء هوية بصرية جريئة لعلامة YTArabia."
+        data-title-ar="بانر قناة YTArabia"
         data-meta="YouTube · Channel Branding">
         <div class="art">
-          <span class="tag">Ads</span>
+          <span class="tag" data-i18n="filter.ads">Ads</span>
           <img src="assets/img/ytarabia-banner-thumb.webp" alt="YTArabia YouTube channel banner design" width="500" height="281">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>YTArabia Channel Banner</h3><p>YouTube · Photoshop</p></div>
+        <div class="info"><h3 data-ar="بانر قناة YTArabia">YTArabia Channel Banner</h3><p>YouTube · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="gaming"
         data-img="assets/img/mystery-horror-reveal.webp"
         data-title="Mystery Horror Reveal"
         data-desc="A suspense-driven horror thumbnail pairing a startled reaction shot with a glowing question mark and a lurking creature silhouette to maximize curiosity clicks."
+        data-desc-ar="صورة مصغّرة رعب مشوقة تجمع بين ردة فعل مندهشة وعلامة استفهام مضيئة وظل مخلوق كامن، لتعزيز الفضول والنقر."
+        data-title-ar="كشف رعب غامض"
         data-meta="YouTube · Horror Gaming">
         <div class="art">
-          <span class="tag">Gaming</span>
+          <span class="tag" data-i18n="filter.gaming">Gaming</span>
           <img src="assets/img/mystery-horror-reveal-thumb.webp" alt="Mystery horror reveal reaction thumbnail" width="500" height="281">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Mystery Horror Reveal</h3><p>YouTube · Photoshop</p></div>
+        <div class="info"><h3 data-ar="كشف رعب غامض">Mystery Horror Reveal</h3><p>YouTube · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="gaming"
         data-img="assets/img/fut-champions-journey.webp"
         data-title="FUT Champions — Start of the Journey"
         data-desc="A high-energy FIFA Ultimate Team thumbnail combining celebrating player cutouts, gold coin motifs, and bold Arabic typography to signal the start of a new competitive season."
+        data-desc-ar="صورة مصغّرة نابضة بالحيوية لفيفا ألتيميت تيم، تجمع بين قصاصات لاعبين يحتفلون وعناصر عملات ذهبية وخط عربي جريء للإعلان عن بداية موسم تنافسي جديد."
+        data-title-ar="FUT Champions — بداية المسيرة"
         data-meta="YouTube · FIFA / FUT Gaming">
         <div class="art">
-          <span class="tag">Gaming</span>
+          <span class="tag" data-i18n="filter.gaming">Gaming</span>
           <img src="assets/img/fut-champions-journey-thumb.webp" alt="FUT Champions start of the journey thumbnail" width="500" height="281">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>FUT Champions — Start of the Journey</h3><p>YouTube · Photoshop</p></div>
+        <div class="info"><h3 data-ar="FUT Champions — بداية المسيرة">FUT Champions — Start of the Journey</h3><p>YouTube · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="gaming"
         data-img="assets/img/nightmares-horror-reaction.webp"
         data-title="Nightmares — Horror Game Reaction"
         data-desc="A tense horror thumbnail built around a wide-eyed reaction shot in a yellow raincoat, with a grinning creature emerging from a red-lit doorway to build dread at a glance."
+        data-desc-ar="صورة مصغّرة رعب مشوّقة تعرض ردة فعل بعينين واسعتين ومعطف مطر أصفر، مع مخلوق مبتسم يخرج من باب بإضاءة حمراء لخلق شعور بالترقب من أول نظرة."
+        data-title-ar="كوابيس — ردة فعل رعب"
         data-meta="YouTube · Horror Gaming">
         <div class="art">
-          <span class="tag">Gaming</span>
+          <span class="tag" data-i18n="filter.gaming">Gaming</span>
           <img src="assets/img/nightmares-horror-reaction-thumb.webp" alt="Nightmares horror game reaction thumbnail" width="500" height="281">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Nightmares — Horror Reaction</h3><p>YouTube · Photoshop</p></div>
+        <div class="info"><h3 data-ar="كوابيس — ردة فعل رعب">Nightmares — Horror Reaction</h3><p>YouTube · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="gaming"
         data-img="assets/img/gnome-hunt-reaction.webp"
         data-title="Gnome Hunt — Game Reaction Thumbnail"
         data-desc="A quirky game-reaction thumbnail pairing a puzzled host portrait with oversized gnome characters and bold pink typography for a lighthearted gaming series."
+        data-desc-ar="صورة مصغّرة طريفة لردة فعل على لعبة، تجمع بين صورة مقدم حائر وشخصيات أقزام ضخمة وخط وردي جريء لسلسلة ألعاب خفيفة."
+        data-title-ar="ردة فعل اصطياد الأقزام"
         data-meta="YouTube · Gaming">
         <div class="art">
-          <span class="tag">Gaming</span>
+          <span class="tag" data-i18n="filter.gaming">Gaming</span>
           <img src="assets/img/gnome-hunt-reaction-thumb.webp" alt="Gnome hunt game reaction thumbnail" width="500" height="281">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Gnome Hunt Reaction</h3><p>YouTube · Photoshop</p></div>
+        <div class="info"><h3 data-ar="ردة فعل اصطياد الأقزام">Gnome Hunt Reaction</h3><p>YouTube · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="entertainment"
         data-img="assets/img/opposite-of-expected.webp"
         data-title="Opposite of Expected — Reaction/Commentary Thumbnail"
         data-desc="A bold celebrity-commentary thumbnail using strong yellow lighting and dimensional Arabic typography to create an eye-catching, editorial-style composition."
+        data-desc-ar="صورة مصغّرة جريئة للتعليق على أخبار المشاهير، تستخدم إضاءة صفراء قوية وخطاً عربياً مجسّماً لتكوين لافت بأسلوب تحريري."
+        data-title-ar="عكس المتوقع"
         data-meta="YouTube · Entertainment Commentary">
         <div class="art">
-          <span class="tag">Entertainment</span>
+          <span class="tag" data-i18n="filter.entertainment">Entertainment</span>
           <img src="assets/img/opposite-of-expected-thumb.webp" alt="Opposite of expected commentary thumbnail" width="500" height="281">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Opposite of Expected</h3><p>YouTube · Photoshop</p></div>
+        <div class="info"><h3 data-ar="عكس المتوقع">Opposite of Expected</h3><p>YouTube · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="educational"
         data-img="assets/img/course-photoshop-february.webp"
         data-title="Photoshop Course Announcement — 3BSI Digital Academy"
         data-desc="A modern course-launch graphic combining a personal instructor photo, Photoshop toolbar iconography, and topographic line art to promote a new Photoshop training cohort."
+        data-desc-ar="تصميم عصري للإعلان عن كورس جديد، يجمع بين صورة شخصية للمدرب وأيقونات شريط أدوات فوتوشوب ورسومات خطوط طبوغرافية للترويج لدفعة تدريبية جديدة."
+        data-title-ar="إعلان كورس فوتوشوب"
         data-meta="Social Media Ad · Digital Academy">
         <div class="art">
-          <span class="tag">Educational</span>
+          <span class="tag" data-i18n="filter.educational">Educational</span>
           <img src="assets/img/course-photoshop-february-thumb.webp" alt="Photoshop course announcement graphic" width="500" height="500">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Photoshop Course Announcement</h3><p>Social Ad · Photoshop</p></div>
+        <div class="info"><h3 data-ar="إعلان كورس فوتوشوب">Photoshop Course Announcement</h3><p>Social Ad · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="ads"
         data-img="assets/img/hohos-product-ad.webp"
         data-title="HOHOs — Chocolate Roll Product Ad"
         data-desc="A dynamic product ad using dramatic milk and chocolate splash effects to give a packaged snack a premium, appetite-driving presentation."
+        data-desc-ar="إعلان منتج ديناميكي يستخدم تأثيرات انسكاب حليب وشوكولاتة درامية لإعطاء وجبة خفيفة معبأة مظهراً فاخراً يفتح الشهية."
+        data-title-ar="إعلان منتج HOHOs"
         data-meta="Social Media Ad · Product Photography">
         <div class="art">
-          <span class="tag">Ads</span>
+          <span class="tag" data-i18n="filter.ads">Ads</span>
           <img src="assets/img/hohos-product-ad-thumb.webp" alt="HOHOs chocolate roll product ad" width="500" height="500">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>HOHOs Product Ad</h3><p>Social Ad · Photoshop</p></div>
+        <div class="info"><h3 data-ar="إعلان منتج HOHOs">HOHOs Product Ad</h3><p>Social Ad · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="ads"
         data-img="assets/img/fitness-world-gym-ad.webp"
         data-title="Fitness World Gym — Motivational Promo"
         data-desc="A high-contrast fitness promotional graphic pairing a strong athlete portrait with bold Arabic motivational copy to drive gym membership sign-ups."
+        data-desc-ar="تصميم ترويجي عالي التباين للياقة البدنية، يجمع بين صورة رياضي قوي البنية ونص تحفيزي عربي جريء لتشجيع الاشتراك في الجيم."
+        data-title-ar="إعلان جيم Fitness World"
         data-meta="Social Media Ad · Fitness">
         <div class="art">
-          <span class="tag">Ads</span>
+          <span class="tag" data-i18n="filter.ads">Ads</span>
           <img src="assets/img/fitness-world-gym-ad-thumb.webp" alt="Fitness World Gym motivational promo ad" width="500" height="500">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Fitness World Gym Promo</h3><p>Social Ad · Photoshop</p></div>
+        <div class="info"><h3 data-ar="إعلان جيم Fitness World">Fitness World Gym Promo</h3><p>Social Ad · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="ads"
         data-img="assets/img/air-jordan-product-ad.webp"
         data-title="Air Jordan 1 — Product Launch Ad"
         data-desc="A clean, brand-forward sneaker ad using a dramatic blue gradient and a floating product shot to highlight a signature Jordan colorway."
+        data-desc-ar="إعلان حذاء رياضي أنيق يبرز هوية العلامة التجارية، باستخدام تدرج أزرق درامي وصورة منتج عائمة لإبراز تشكيلة ألوان جوردان المميزة."
+        data-title-ar="إعلان منتج Air Jordan 1"
         data-meta="Social Media Ad · Footwear">
         <div class="art">
-          <span class="tag">Ads</span>
+          <span class="tag" data-i18n="filter.ads">Ads</span>
           <img src="assets/img/air-jordan-product-ad-thumb.webp" alt="Air Jordan 1 product launch ad" width="500" height="500">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Air Jordan 1 Product Ad</h3><p>Social Ad · Photoshop</p></div>
+        <div class="info"><h3 data-ar="إعلان منتج Air Jordan 1">Air Jordan 1 Product Ad</h3><p>Social Ad · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="ads"
         data-img="assets/img/real-estate-delta-cities.webp"
         data-title="Delta Cities — Real Estate Promo"
         data-desc="A polished real estate ad using a phone-frame building reveal and a professional model shot to promote a new generation of developments, paired with a limited-time offer badge."
+        data-desc-ar="إعلان عقاري احترافي يستخدم إطار هاتف يكشف عن مبنى وصورة لعارض أزياء لترويج جيل جديد من المشروعات، مع شارة عرض لفترة محدودة."
+        data-title-ar="إعلان عقاري — مدن الدلتا"
         data-meta="Social Media Ad · Real Estate">
         <div class="art">
-          <span class="tag">Ads</span>
+          <span class="tag" data-i18n="filter.ads">Ads</span>
           <img src="assets/img/real-estate-delta-cities-thumb.webp" alt="Delta cities real estate promo ad" width="500" height="500">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Delta Cities Real Estate Promo</h3><p>Social Ad · Photoshop</p></div>
+        <div class="info"><h3 data-ar="إعلان عقاري — مدن الدلتا">Delta Cities Real Estate Promo</h3><p>Social Ad · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="ads"
         data-img="assets/img/juice-burst-product-ad.webp"
         data-title="Juice Burst — Orange Juice Product Ad"
         data-desc="A vibrant product ad using radiant color and dynamic liquid-splash effects to give a fresh juice bottle an energetic, thirst-quenching presentation."
+        data-desc-ar="إعلان منتج نابض بالحياة يستخدم ألواناً مشرقة وتأثيرات انسكاب سائل ديناميكية لإعطاء زجاجة عصير طازج مظهراً منعشاً ومليئاً بالطاقة."
+        data-title-ar="إعلان منتج Juice Burst"
         data-meta="Social Media Ad · Beverage">
         <div class="art">
-          <span class="tag">Ads</span>
+          <span class="tag" data-i18n="filter.ads">Ads</span>
           <img src="assets/img/juice-burst-product-ad-thumb.webp" alt="Juice Burst orange juice product ad" width="500" height="500">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Juice Burst Product Ad</h3><p>Social Ad · Photoshop</p></div>
+        <div class="info"><h3 data-ar="إعلان منتج Juice Burst">Juice Burst Product Ad</h3><p>Social Ad · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="gaming"
         data-img="assets/img/fnaf-horror-reaction.webp"
         data-title="Five Nights Reaction — Horror Game Thumbnail"
         data-desc="A high-impact horror gaming thumbnail contrasting a shocked host portrait with a menacing golden animatronic and bold red exclamatory type."
+        data-desc-ar="صورة مصغّرة رعب قوية التأثير تُظهر تبايناً بين صورة مقدم مصدوم ودمية آلية ذهبية مخيفة، مع خط أحمر جريء للتعجب."
+        data-title-ar="ردة فعل Five Nights"
         data-meta="YouTube · Horror Gaming">
         <div class="art">
-          <span class="tag">Gaming</span>
+          <span class="tag" data-i18n="filter.gaming">Gaming</span>
           <img src="assets/img/fnaf-horror-reaction-thumb.webp" alt="Five Nights at Freddy's horror reaction thumbnail" width="500" height="281">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>Five Nights Reaction</h3><p>YouTube · Photoshop</p></div>
+        <div class="info"><h3 data-ar="ردة فعل Five Nights">Five Nights Reaction</h3><p>YouTube · Photoshop</p></div>
       </div>
 
       <div class="card reveal" data-cat="gaming"
         data-img="assets/img/heart-stopped-horror-reaction.webp"
         data-title="My Heart Stopped — Horror Reaction Thumbnail"
         data-desc="A tense horror thumbnail pairing a startled host close-up with a screaming red-lit creature and glowing outlined Arabic type for maximum shock value."
+        data-desc-ar="صورة مصغّرة رعب مشوّقة تجمع بين لقطة قريبة لمقدم مصدوم ومخلوق صارخ بإضاءة حمراء، مع خط عربي مضيء لأقصى تأثير صادم."
+        data-title-ar="قلبي وقف"
         data-meta="YouTube · Horror Gaming">
         <div class="art">
-          <span class="tag">Gaming</span>
+          <span class="tag" data-i18n="filter.gaming">Gaming</span>
           <img src="assets/img/heart-stopped-horror-reaction-thumb.webp" alt="My heart stopped horror reaction thumbnail" width="500" height="281">
-          <div class="hover-view">View project →</div>
+          <div class="hover-view" data-i18n="common.viewProject">View project →</div>
         </div>
-        <div class="info"><h3>My Heart Stopped</h3><p>YouTube · Photoshop</p></div>
+        <div class="info"><h3 data-ar="قلبي وقف">My Heart Stopped</h3><p>YouTube · Photoshop</p></div>
       </div>
 
     </div>
@@ -945,71 +1084,127 @@
 <section id="services">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">What I do</div>
-      <h2>One designer, every format.</h2>
+      <div class="eyebrow" data-i18n="services.eyebrow">What I do</div>
+      <h2 data-i18n="services.title">One designer, every format.</h2>
     </div>
     <div class="services-grid">
       <div class="service reveal">
         <div class="icon">Yt</div>
-        <h3>YouTube Thumbnail Design</h3>
-        <p>Scroll-stopping thumbnails matched to your channel's style and built to lift click-through rate.</p>
+        <h3 data-i18n="services.s1.title">YouTube Thumbnail Design</h3>
+        <p data-i18n="services.s1.desc">Scroll-stopping thumbnails matched to your channel's style and built to lift click-through rate.</p>
       </div>
       <div class="service reveal">
         <div class="icon">Gm</div>
-        <h3>Gaming Thumbnail Design</h3>
-        <p>High-energy composites for gaming and horror content, built around reaction shots and in-game moments.</p>
+        <h3 data-i18n="services.s2.title">Gaming Thumbnail Design</h3>
+        <p data-i18n="services.s2.desc">High-energy composites for gaming and horror content, built around reaction shots and in-game moments.</p>
       </div>
       <div class="service reveal">
         <div class="icon">Ed</div>
-        <h3>Educational Thumbnail Design</h3>
-        <p>Clear, credible thumbnails for tutorials and courses that promise value at a glance.</p>
+        <h3 data-i18n="services.s3.title">Educational Thumbnail Design</h3>
+        <p data-i18n="services.s3.desc">Clear, credible thumbnails for tutorials and courses that promise value at a glance.</p>
       </div>
       <div class="service reveal">
         <div class="icon">Dc</div>
-        <h3>Documentary Thumbnail Design</h3>
-        <p>Cinematic, restrained compositions for long-form and documentary-style videos.</p>
+        <h3 data-i18n="services.s4.title">Documentary Thumbnail Design</h3>
+        <p data-i18n="services.s4.desc">Cinematic, restrained compositions for long-form and documentary-style videos.</p>
       </div>
       <div class="service reveal">
         <div class="icon">Sm</div>
-        <h3>Social Media Promotional Graphics</h3>
-        <p>On-brand posts, ads, and announcement graphics that keep your feed consistent and scroll-worthy.</p>
+        <h3 data-i18n="services.s5.title">Social Media Promotional Graphics</h3>
+        <p data-i18n="services.s5.desc">On-brand posts, ads, and announcement graphics that keep your feed consistent and scroll-worthy.</p>
       </div>
       <div class="service reveal">
         <div class="icon">Rt</div>
-        <h3>Photo Manipulation &amp; Retouching</h3>
-        <p>Clean background work, compositing, and retouching, sped up with AI-assisted tools.</p>
+        <h3 data-i18n="services.s6.title">Photo Manipulation &amp; Retouching</h3>
+        <p data-i18n="services.s6.desc">Clean background work, compositing, and retouching, sped up with AI-assisted tools.</p>
       </div>
     </div>
-    <div class="quote-note">💬 Contact for a Custom Quote — every project is priced to fit your content and timeline.</div>
+    <div class="quote-note" data-i18n="services.quote">💬 Need something custom? Contact me for a quote — every project can be tailored to your content and timeline.</div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow" data-i18n="pricing.eyebrow">Pricing</div>
+      <h2 data-i18n="pricing.title">Simple, transparent pricing.</h2>
+      <p data-i18n="pricing.subtitle">Pick a single thumbnail, a bundle, or a monthly plan — all prices in Egyptian Pounds.</p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card reveal">
+        <h3 data-i18n="pricing.single.title">Single Thumbnail</h3>
+        <div class="price-row">
+          <span class="price-new">200</span>
+        </div>
+        <span class="price-unit" data-i18n="pricing.currency">EGP</span>
+        <p class="desc" data-i18n="pricing.single.desc">One high-converting thumbnail, delivered in 24–48 hours.</p>
+        <a href="#contact" class="price-cta" data-i18n="pricing.cta">Get Started</a>
+      </div>
+
+      <div class="price-card reveal">
+        <span class="badge" data-i18n="pricing.bundle.badge">Save 200 EGP</span>
+        <h3 data-i18n="pricing.bundle.title">3-Thumbnail Bundle</h3>
+        <div class="price-row">
+          <span class="price-old">600</span>
+          <span class="price-new">400</span>
+        </div>
+        <span class="price-unit" data-i18n="pricing.currency">EGP</span>
+        <p class="desc" data-i18n="pricing.bundle.desc">Perfect for a short series or several videos at once.</p>
+        <a href="#contact" class="price-cta" data-i18n="pricing.cta">Get Started</a>
+      </div>
+
+      <div class="price-card featured reveal">
+        <span class="badge" data-i18n="pricing.monthly10.badge">Most Popular</span>
+        <h3 data-i18n="pricing.monthly10.title">10 Thumbnails / Month</h3>
+        <div class="price-row">
+          <span class="price-new">699.99</span>
+        </div>
+        <span class="price-unit" data-i18n="pricing.perMonth">EGP / month</span>
+        <p class="desc" data-i18n="pricing.monthly10.desc">A steady monthly supply of thumbnails for active channels.</p>
+        <a href="#contact" class="price-cta" data-i18n="pricing.cta">Get Started</a>
+      </div>
+
+      <div class="price-card reveal">
+        <h3 data-i18n="pricing.unlimited.title">Unlimited Thumbnails</h3>
+        <div class="price-row">
+          <span class="price-new">4999.99</span>
+        </div>
+        <span class="price-unit" data-i18n="pricing.perMonth">EGP / month</span>
+        <p class="desc" data-i18n="pricing.unlimited.desc">For studios and high-volume creators — as many thumbnails as you need.</p>
+        <a href="#contact" class="price-cta" data-i18n="pricing.cta">Get Started</a>
+      </div>
+    </div>
+    <p class="pricing-note" data-i18n-html="pricing.note">Need documentary work or something else entirely? <a href="#contact">Contact me</a> for a custom quote.</p>
   </div>
 </section>
 
 <section id="process">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">How we'll work</div>
-      <h2>From brief to delivered file.</h2>
+      <div class="eyebrow" data-i18n="process.eyebrow">How we'll work</div>
+      <h2 data-i18n="process.title">From brief to delivered file.</h2>
     </div>
     <div class="process">
       <div class="step reveal">
         <div class="num">01</div>
-        <h3>Brief</h3>
-        <p>You send your video, channel style, and any references you like.</p>
+        <h3 data-i18n="process.s1.title">Brief</h3>
+        <p data-i18n="process.s1.desc">You send your video, channel style, and any references you like.</p>
       </div>
       <div class="step reveal">
         <div class="num">02</div>
-        <h3>Concept</h3>
-        <p>I sketch the composition and headline direction before going all in.</p>
+        <h3 data-i18n="process.s2.title">Concept</h3>
+        <p data-i18n="process.s2.desc">I sketch the composition and headline direction before going all in.</p>
       </div>
       <div class="step reveal">
         <div class="num">03</div>
-        <h3>Design</h3>
-        <p>Full design pass in Photoshop, with AI tools used for speed on retouching and compositing.</p>
+        <h3 data-i18n="process.s3.title">Design</h3>
+        <p data-i18n="process.s3.desc">Full design pass in Photoshop, with AI tools used for speed on retouching and compositing.</p>
       </div>
       <div class="step reveal">
         <div class="num">04</div>
-        <h3>Deliver</h3>
-        <p>You get the final file within 24–48 hours, plus revisions included.</p>
+        <h3 data-i18n="process.s4.title">Deliver</h3>
+        <p data-i18n="process.s4.desc">You get the final file within 24–48 hours, plus revisions included.</p>
       </div>
     </div>
   </div>
@@ -1018,20 +1213,20 @@
 <section id="contact">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="eyebrow">Get in touch</div>
-      <h2>Got a video coming up?</h2>
-      <p>Send me the details and I'll get back to you with ideas and a custom quote — usually within a day.</p>
+      <div class="eyebrow" data-i18n="contact.eyebrow">Get in touch</div>
+      <h2 data-i18n="contact.title">Got a video coming up?</h2>
+      <p data-i18n="contact.subtitle">Send me the details and I'll get back to you with ideas and a custom quote — usually within a day.</p>
     </div>
     <div class="contact-grid">
       <div class="cta-band reveal">
-        <h2>Prefer a quick message?</h2>
-        <p>Reach out directly and I'll reply as soon as I can.</p>
+        <h2 data-i18n="contact.quickTitle">Prefer a quick message?</h2>
+        <p data-i18n="contact.quickSubtitle">Reach out directly and I'll reply as soon as I can.</p>
         <div class="hero-ctas">
           <a href="https://wa.me/201092545695?text=Hi%20Ahmed%2C%20I%27d%20like%20a%20quote%20for%20a%20thumbnail" target="_blank" rel="noopener" class="btn-whatsapp">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.92 0-2.65-1.03-5.14-2.9-7.01A9.865 9.865 0 0 0 12.04 2zm5.8 14.02c-.24.68-1.4 1.3-1.93 1.38-.5.08-1.12.11-1.81-.11-.42-.13-.95-.31-1.64-.6-2.88-1.24-4.76-4.15-4.9-4.34-.14-.19-1.17-1.56-1.17-2.98 0-1.42.74-2.11 1-2.4.27-.29.58-.36.78-.36.19 0 .39 0 .56.01.18.01.42-.07.65.5.24.58.82 2 .9 2.14.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.19-.27.37-.22.62-.13.26.09 1.63.77 1.91.91.28.14.47.21.53.33.07.12.07.68-.17 1.36z"/></svg>
-            WhatsApp Me
+            <span data-i18n="common.whatsapp">WhatsApp Me</span>
           </a>
-          <a href="mailto:abdelsalamahmed432@gmail.com" class="btn-primary">Email Me</a>
+          <a href="mailto:abdelsalamahmed432@gmail.com" class="btn-primary" data-i18n="common.emailMe">Email Me</a>
         </div>
         <div class="contact-detail">
           <a href="mailto:abdelsalamahmed432@gmail.com">abdelsalamahmed432@gmail.com</a>
@@ -1044,45 +1239,46 @@
       </div>
 
       <form class="contact-form reveal" id="contactForm" action="https://formspree.io/f/mbdvwpdo" method="POST">
-        <h3>Or send a project brief</h3>
-        <p class="sub">Fill this in and it'll land straight in my inbox.</p>
+        <h3 data-i18n="form.title">Or send a project brief</h3>
+        <p class="sub" data-i18n="form.subtitle">Fill this in and it'll land straight in my inbox.</p>
 
         <div class="form-row">
           <div class="form-group">
-            <label for="cf-name">Name</label>
+            <label for="cf-name" data-i18n="form.name">Name</label>
             <input type="text" id="cf-name" name="name" required autocomplete="name">
           </div>
           <div class="form-group">
-            <label for="cf-email">Email</label>
+            <label for="cf-email" data-i18n="form.email">Email</label>
             <input type="email" id="cf-email" name="email" required autocomplete="email">
           </div>
         </div>
 
         <div class="form-group">
-          <label for="cf-video">Channel / Video link (optional)</label>
-          <input type="text" id="cf-video" name="video_link" placeholder="e.g. link to your channel or video">
+          <label for="cf-video" data-i18n="form.videoLabel">Channel / Video link (optional)</label>
+          <input type="text" id="cf-video" name="video_link" data-i18n-placeholder="form.videoPlaceholder" placeholder="e.g. link to your channel or video">
         </div>
 
         <div class="form-group">
-          <label for="cf-budget">Budget range</label>
+          <label for="cf-budget" data-i18n="form.budgetLabel">Budget range</label>
           <select id="cf-budget" name="budget">
-            <option value="Not sure yet">Not sure yet</option>
-            <option value="$10-30">$10–30</option>
-            <option value="$30-60">$30–60</option>
-            <option value="$60+">$60+</option>
-            <option value="Custom / ongoing">Custom / ongoing work</option>
+            <option value="Not sure yet" data-i18n="form.budgetUnsure">Not sure yet</option>
+            <option value="200 EGP - Single thumbnail" data-i18n="form.budget1">200 EGP — Single thumbnail</option>
+            <option value="400 EGP - 3 Bundle" data-i18n="form.budget2">400 EGP — 3-Thumbnail Bundle</option>
+            <option value="699.99 EGP/mo - 10 Monthly" data-i18n="form.budget3">699.99 EGP/mo — 10 Monthly</option>
+            <option value="4999.99 EGP/mo - Unlimited" data-i18n="form.budget4">4999.99 EGP/mo — Unlimited</option>
+            <option value="Custom / ongoing" data-i18n="form.budget5">Custom / Other</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="cf-message">Project details</label>
-          <textarea id="cf-message" name="message" required placeholder="Tell me about your channel, the video, and when you need it by."></textarea>
+          <label for="cf-message" data-i18n="form.messageLabel">Project details</label>
+          <textarea id="cf-message" name="message" required data-i18n-placeholder="form.messagePlaceholder" placeholder="Tell me about your channel, the video, and when you need it by."></textarea>
         </div>
 
         <!-- honeypot spam trap -->
         <input type="text" name="_gotcha" class="form-honeypot" tabindex="-1" autocomplete="off">
 
-        <button type="submit" class="form-submit" id="formSubmitBtn">Send Project Brief</button>
+        <button type="submit" class="form-submit" id="formSubmitBtn" data-i18n="form.submit">Send Project Brief</button>
         <div class="form-status" id="formStatus"></div>
       </form>
     </div>
@@ -1091,7 +1287,7 @@
 
 <footer>
   <div class="wrap">
-    <div class="fine">© 2026 3bsi Photo — Ahmed Abdelsalam. All rights reserved.</div>
+    <div class="fine" data-i18n="footer.rights">© 2026 3bsi Photo — Ahmed Abdelsalam. All rights reserved.</div>
     <div class="social">
       <a href="https://www.youtube.com/@ahmedabdelsalam1509" target="_blank" rel="noopener">YouTube</a>
       <a href="https://www.instagram.com/ahmed83900/" target="_blank" rel="noopener">Instagram</a>
@@ -1113,6 +1309,176 @@
 </div>
 
 <script>
+  // ---------- i18n dictionary ----------
+  const translations = {
+    en: {
+      "nav.work":"Work","nav.services":"Services","nav.pricing":"Pricing","nav.process":"Process","nav.contact":"Contact","nav.cta":"Get a Quote",
+      "hero.eyebrow":"YouTube Thumbnail Design",
+      "hero.title":"Stop the scroll<br>with a<span class=\"hl\">thumbnail</span><br>that hits.",
+      "hero.lede":"I create high-converting YouTube thumbnails that capture attention and increase click-through rates — matched to your brand and content style.",
+      "hero.ctaWork":"See the work","hero.ctaHire":"Hire me",
+      "common.whatsapp":"WhatsApp Me","common.emailMe":"Email Me","common.viewProject":"View project →",
+      "about.eyebrow":"About",
+      "about.p1":"I specialize in designing professional YouTube thumbnails. My goal is to create visually striking designs that maximize clicks while matching each creator's branding and content style.",
+      "about.p2":"I focus on clean composition, strong visual hierarchy, and effective color usage — every thumbnail is built to work at a glance, at any size.",
+      "about.tag1":"Adobe Photoshop","about.tag2":"AI-Assisted Editing","about.tag3":"Photo Manipulation","about.tag4":"Sports & Gaming Content",
+      "about.turnaround":"Turnaround","about.standard":"Standard Delivery","about.standardVal":"24–48 Hours",
+      "about.rush":"Rush Delivery","about.rushVal":"Available on request","about.revisions":"Revisions","about.revisionsVal":"Included",
+      "about.pricingLabel":"Pricing","about.pricingVal":"From 200 EGP",
+      "work.eyebrow":"Selected work","work.title":"Built to be clicked.",
+      "work.subtitle":"A selection of YouTube thumbnails and promotional graphics — each one designed around one job: making someone stop scrolling.",
+      "filter.all":"All","filter.sports":"Sports","filter.gaming":"Gaming","filter.entertainment":"Entertainment","filter.ads":"Ads & Products","filter.educational":"Educational",
+      "services.eyebrow":"What I do","services.title":"One designer, every format.",
+      "services.s1.title":"YouTube Thumbnail Design","services.s1.desc":"Scroll-stopping thumbnails matched to your channel's style and built to lift click-through rate.",
+      "services.s2.title":"Gaming Thumbnail Design","services.s2.desc":"High-energy composites for gaming and horror content, built around reaction shots and in-game moments.",
+      "services.s3.title":"Educational Thumbnail Design","services.s3.desc":"Clear, credible thumbnails for tutorials and courses that promise value at a glance.",
+      "services.s4.title":"Documentary Thumbnail Design","services.s4.desc":"Cinematic, restrained compositions for long-form and documentary-style videos.",
+      "services.s5.title":"Social Media Promotional Graphics","services.s5.desc":"On-brand posts, ads, and announcement graphics that keep your feed consistent and scroll-worthy.",
+      "services.s6.title":"Photo Manipulation & Retouching","services.s6.desc":"Clean background work, compositing, and retouching, sped up with AI-assisted tools.",
+      "services.quote":"💬 Need something custom? Contact me for a quote — every project can be tailored to your content and timeline.",
+      "pricing.eyebrow":"Pricing","pricing.title":"Simple, transparent pricing.",
+      "pricing.subtitle":"Pick a single thumbnail, a bundle, or a monthly plan — all prices in Egyptian Pounds.",
+      "pricing.single.title":"Single Thumbnail","pricing.single.desc":"One high-converting thumbnail, delivered in 24–48 hours.",
+      "pricing.bundle.badge":"Save 200 EGP","pricing.bundle.title":"3-Thumbnail Bundle","pricing.bundle.desc":"Perfect for a short series or several videos at once.",
+      "pricing.monthly10.badge":"Most Popular","pricing.monthly10.title":"10 Thumbnails / Month","pricing.monthly10.desc":"A steady monthly supply of thumbnails for active channels.",
+      "pricing.unlimited.title":"Unlimited Thumbnails","pricing.unlimited.desc":"For studios and high-volume creators — as many thumbnails as you need.",
+      "pricing.currency":"EGP","pricing.perMonth":"EGP / month","pricing.cta":"Get Started",
+      "pricing.note":"Need documentary work or something else entirely? <a href=\"#contact\">Contact me</a> for a custom quote.",
+      "process.eyebrow":"How we'll work","process.title":"From brief to delivered file.",
+      "process.s1.title":"Brief","process.s1.desc":"You send your video, channel style, and any references you like.",
+      "process.s2.title":"Concept","process.s2.desc":"I sketch the composition and headline direction before going all in.",
+      "process.s3.title":"Design","process.s3.desc":"Full design pass in Photoshop, with AI tools used for speed on retouching and compositing.",
+      "process.s4.title":"Deliver","process.s4.desc":"You get the final file within 24–48 hours, plus revisions included.",
+      "contact.eyebrow":"Get in touch","contact.title":"Got a video coming up?",
+      "contact.subtitle":"Send me the details and I'll get back to you with ideas and a custom quote — usually within a day.",
+      "contact.quickTitle":"Prefer a quick message?","contact.quickSubtitle":"Reach out directly and I'll reply as soon as I can.",
+      "form.title":"Or send a project brief","form.subtitle":"Fill this in and it'll land straight in my inbox.",
+      "form.name":"Name","form.email":"Email",
+      "form.videoLabel":"Channel / Video link (optional)","form.videoPlaceholder":"e.g. link to your channel or video",
+      "form.budgetLabel":"Budget range","form.budgetUnsure":"Not sure yet",
+      "form.budget1":"200 EGP — Single thumbnail","form.budget2":"400 EGP — 3-Thumbnail Bundle",
+      "form.budget3":"699.99 EGP/mo — 10 Monthly","form.budget4":"4999.99 EGP/mo — Unlimited","form.budget5":"Custom / Other",
+      "form.messageLabel":"Project details","form.messagePlaceholder":"Tell me about your channel, the video, and when you need it by.",
+      "form.submit":"Send Project Brief","form.sending":"Sending...",
+      "form.success":"Thanks! Your project brief is in — I'll get back to you within a day.",
+      "form.error":"Something went wrong sending that. Please try WhatsApp or email instead.",
+      "form.networkError":"Network error. Please try WhatsApp or email instead.",
+      "footer.rights":"© 2026 3bsi Photo — Ahmed Abdelsalam. All rights reserved."
+    },
+    ar: {
+      "nav.work":"الأعمال","nav.services":"الخدمات","nav.pricing":"الأسعار","nav.process":"طريقة العمل","nav.contact":"تواصل","nav.cta":"اطلب عرض سعر",
+      "hero.eyebrow":"تصميم صور مصغّرة ليوتيوب",
+      "hero.title":"وقف السكرول<br>بصورة<span class=\"hl\">مصغّرة</span><br>تلفت الانتباه.",
+      "hero.lede":"أصمم صور مصغّرة ليوتيوب تجذب الانتباه وتزيد نسبة النقر، بأسلوب يتماشى مع هوية علامتك ومحتواك.",
+      "hero.ctaWork":"شاهد الأعمال","hero.ctaHire":"وظفني",
+      "common.whatsapp":"راسلني واتساب","common.emailMe":"راسلني بالإيميل","common.viewProject":"عرض المشروع ←",
+      "about.eyebrow":"نبذة عني",
+      "about.p1":"أتخصص في تصميم صور مصغّرة احترافية ليوتيوب. هدفي إنشاء تصاميم لافتة تزيد النقرات مع الحفاظ على هوية كل صانع محتوى وأسلوبه.",
+      "about.p2":"أركّز على التكوين النظيف والتسلسل البصري القوي واستخدام الألوان بفعالية — كل صورة مصغّرة مصممة لتوصل رسالتها من أول نظرة، بأي حجم.",
+      "about.tag1":"أدوبي فوتوشوب","about.tag2":"تعديل بمساعدة الذكاء الاصطناعي","about.tag3":"دمج وتعديل الصور","about.tag4":"محتوى رياضي وألعاب",
+      "about.turnaround":"مدة التسليم","about.standard":"التسليم العادي","about.standardVal":"24–48 ساعة",
+      "about.rush":"التسليم السريع","about.rushVal":"متاح عند الطلب","about.revisions":"التعديلات","about.revisionsVal":"مشمولة",
+      "about.pricingLabel":"الأسعار","about.pricingVal":"تبدأ من 200 جنيه",
+      "work.eyebrow":"أعمال مختارة","work.title":"مصممة لتُنقر.",
+      "work.subtitle":"مجموعة من صور اليوتيوب المصغّرة والتصاميم الترويجية — كل واحدة مصممة لهدف واحد: إيقاف السكرول.",
+      "filter.all":"الكل","filter.sports":"رياضة","filter.gaming":"ألعاب","filter.entertainment":"ترفيه","filter.ads":"إعلانات ومنتجات","filter.educational":"تعليمي",
+      "services.eyebrow":"خدماتي","services.title":"مصمم واحد، لكل صيغة.",
+      "services.s1.title":"تصميم صور يوتيوب المصغّرة","services.s1.desc":"صور مصغّرة توقف السكرول، متناسقة مع أسلوب قناتك ومصممة لرفع نسبة النقر.",
+      "services.s2.title":"تصميم صور مصغّرة للألعاب","services.s2.desc":"تصاميم نابضة بالحيوية لمحتوى الألعاب والرعب، مبنية على ردود الأفعال ولقطات من داخل اللعبة.",
+      "services.s3.title":"تصميم صور مصغّرة تعليمية","services.s3.desc":"صور مصغّرة واضحة وموثوقة للدورات والشروحات، توصل القيمة من أول نظرة.",
+      "services.s4.title":"تصميم صور مصغّرة وثائقية","services.s4.desc":"تكوينات سينمائية هادئة للفيديوهات الطويلة والمحتوى الوثائقي.",
+      "services.s5.title":"تصاميم ترويجية لمواقع التواصل","services.s5.desc":"منشورات وإعلانات وتصاميم إعلانية متناسقة مع هويتك تجعل صفحتك جذابة دائماً.",
+      "services.s6.title":"دمج وتعديل الصور","services.s6.desc":"تعديل خلفيات ودمج وتحسين للصور، بسرعة أكبر بمساعدة أدوات الذكاء الاصطناعي.",
+      "services.quote":"💬 محتاج حاجة مختلفة؟ تواصل معايا للحصول على عرض سعر — كل مشروع ممكن يتفصّل على مقاسك.",
+      "pricing.eyebrow":"الأسعار","pricing.title":"أسعار بسيطة وواضحة.",
+      "pricing.subtitle":"اختار صورة واحدة، أو باقة، أو اشتراك شهري — كل الأسعار بالجنيه المصري.",
+      "pricing.single.title":"صورة واحدة","pricing.single.desc":"صورة مصغّرة واحدة عالية الجودة، تسليم خلال 24–48 ساعة.",
+      "pricing.bundle.badge":"وفّر 200 جنيه","pricing.bundle.title":"باقة 3 صور","pricing.bundle.desc":"مثالية لسلسلة فيديوهات قصيرة أو عدة فيديوهات دفعة واحدة.",
+      "pricing.monthly10.badge":"الأكثر طلبًا","pricing.monthly10.title":"10 صور شهريًا","pricing.monthly10.desc":"إمداد شهري ثابت من الصور المصغّرة للقنوات النشطة.",
+      "pricing.unlimited.title":"صور غير محدودة","pricing.unlimited.desc":"للاستوديوهات وصناع المحتوى ذوي الإنتاج الكثيف — بلا حدود.",
+      "pricing.currency":"جنيه","pricing.perMonth":"جنيه / شهريًا","pricing.cta":"ابدأ الآن",
+      "pricing.note":"محتاج شغل وثائقي أو حاجة مختلفة تمامًا؟ <a href=\"#contact\">تواصل معايا</a> للحصول على عرض سعر خاص.",
+      "process.eyebrow":"طريقة عملنا","process.title":"من الفكرة للملف النهائي.",
+      "process.s1.title":"الفكرة","process.s1.desc":"ترسل لي الفيديو وأسلوب قناتك وأي مراجع تحبها.",
+      "process.s2.title":"التصور","process.s2.desc":"أرسم التكوين واتجاه العنوان الرئيسي قبل البدء الكامل.",
+      "process.s3.title":"التصميم","process.s3.desc":"تصميم كامل في فوتوشوب، مع استخدام أدوات الذكاء الاصطناعي لتسريع التعديل والدمج.",
+      "process.s4.title":"التسليم","process.s4.desc":"تستلم الملف النهائي خلال 24–48 ساعة، والتعديلات مشمولة.",
+      "contact.eyebrow":"تواصل معي","contact.title":"عندك فيديو قريب؟",
+      "contact.subtitle":"ابعتلي التفاصيل وهرد عليك بأفكار وعرض سعر خاص — عادةً خلال يوم واحد.",
+      "contact.quickTitle":"تفضل رسالة سريعة؟","contact.quickSubtitle":"تواصل معايا مباشرة وهرد عليك بأسرع وقت.",
+      "form.title":"أو ابعت تفاصيل مشروعك","form.subtitle":"املأ البيانات دي وهتوصلني على طول في الإيميل.",
+      "form.name":"الاسم","form.email":"البريد الإلكتروني",
+      "form.videoLabel":"رابط القناة / الفيديو (اختياري)","form.videoPlaceholder":"مثال: رابط قناتك أو فيديو معين",
+      "form.budgetLabel":"الميزانية","form.budgetUnsure":"مش متأكد لسه",
+      "form.budget1":"200 جنيه — صورة واحدة","form.budget2":"400 جنيه — باقة 3 صور",
+      "form.budget3":"699.99 جنيه شهريًا — 10 صور","form.budget4":"4999.99 جنيه شهريًا — غير محدود","form.budget5":"مخصص / حاجة تانية",
+      "form.messageLabel":"تفاصيل المشروع","form.messagePlaceholder":"احكيلي عن قناتك، الفيديو، ومتى محتاج التسليم.",
+      "form.submit":"إرسال تفاصيل المشروع","form.sending":"جارٍ الإرسال...",
+      "form.success":"تمام! تفاصيل مشروعك وصلتني — هرد عليك خلال يوم.",
+      "form.error":"حصلت مشكلة في الإرسال. جرّب واتساب أو الإيميل بدل كده.",
+      "form.networkError":"في مشكلة بالاتصال. جرّب واتساب أو الإيميل بدل كده.",
+      "footer.rights":"© 2026 3bsi Photo — أحمد عبدالسلام. جميع الحقوق محفوظة."
+    }
+  };
+
+  function applyTranslations(lang){
+    const dict = translations[lang];
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const key = el.getAttribute('data-i18n');
+      if(dict[key] !== undefined) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+      const key = el.getAttribute('data-i18n-html');
+      if(dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+      const key = el.getAttribute('data-i18n-placeholder');
+      if(dict[key] !== undefined) el.setAttribute('placeholder', dict[key]);
+    });
+    // Portfolio card titles carry their own inline Arabic/English pair via data-ar
+    document.querySelectorAll('[data-ar]').forEach(el=>{
+      if(!el.dataset.enCache) el.dataset.enCache = el.textContent;
+      el.textContent = lang === 'ar' ? el.getAttribute('data-ar') : el.dataset.enCache;
+    });
+  }
+
+  function setLanguage(lang){
+    document.documentElement.setAttribute('lang', lang === 'ar' ? 'ar' : 'en');
+    document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+    document.documentElement.setAttribute('data-lang', lang);
+    applyTranslations(lang);
+    const langToggleBtn = document.getElementById('langToggle');
+    if(langToggleBtn) langToggleBtn.textContent = lang === 'ar' ? 'EN' : 'AR';
+    try{ localStorage.setItem('site-lang', lang); }catch(e){}
+  }
+
+  function setTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    try{ localStorage.setItem('site-theme', theme); }catch(e){}
+  }
+
+  // Initialize language + theme from saved preference (default: English, dark)
+  let savedLang = 'en';
+  let savedTheme = 'dark';
+  try{
+    savedLang = localStorage.getItem('site-lang') || 'en';
+    savedTheme = localStorage.getItem('site-theme') || 'dark';
+  }catch(e){}
+  setLanguage(savedLang);
+  setTheme(savedTheme);
+
+  const langToggle = document.getElementById('langToggle');
+  langToggle.addEventListener('click', ()=>{
+    const current = document.documentElement.getAttribute('data-lang') || 'en';
+    setLanguage(current === 'ar' ? 'en' : 'ar');
+  });
+
+  const themeToggle = document.getElementById('themeToggle');
+  themeToggle.addEventListener('click', ()=>{
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    setTheme(current === 'light' ? 'dark' : 'light');
+  });
+
   // Scroll-reveal: fade/slide elements in as they enter the viewport
   const revealEls = document.querySelectorAll('.reveal');
   if('IntersectionObserver' in window){
@@ -1163,12 +1529,13 @@
 
   cards.forEach(card=>{
     card.addEventListener('click', ()=>{
+      const isAr = document.documentElement.getAttribute('data-lang') === 'ar';
       modalImg.src = card.dataset.img;
-      modalImg.alt = card.dataset.title;
+      modalImg.alt = isAr ? (card.dataset.titleAr || card.dataset.title) : card.dataset.title;
       modalTag.textContent = card.querySelector('.tag').textContent;
-      modalTitle.textContent = card.dataset.title;
+      modalTitle.textContent = isAr ? (card.dataset.titleAr || card.dataset.title) : card.dataset.title;
       modalMeta.textContent = card.dataset.meta;
-      modalDesc.textContent = card.dataset.desc;
+      modalDesc.textContent = isAr ? (card.dataset.descAr || card.dataset.desc) : card.dataset.desc;
       overlay.classList.add('open');
     });
   });
@@ -1183,8 +1550,10 @@
 
   contactForm.addEventListener('submit', async (e)=>{
     e.preventDefault();
+    const lang = document.documentElement.getAttribute('data-lang') || 'en';
+    const t = translations[lang];
     formSubmitBtn.disabled = true;
-    formSubmitBtn.textContent = 'Sending...';
+    formSubmitBtn.textContent = t['form.sending'];
     formStatus.className = 'form-status';
 
     try{
@@ -1195,19 +1564,19 @@
       });
 
       if(response.ok){
-        formStatus.textContent = "Thanks! Your project brief is in — I'll get back to you within a day.";
+        formStatus.textContent = t['form.success'];
         formStatus.className = 'form-status show success';
         contactForm.reset();
       } else {
-        formStatus.textContent = "Something went wrong sending that. Please try WhatsApp or email instead.";
+        formStatus.textContent = t['form.error'];
         formStatus.className = 'form-status show error';
       }
     } catch(err){
-      formStatus.textContent = "Network error. Please try WhatsApp or email instead.";
+      formStatus.textContent = t['form.networkError'];
       formStatus.className = 'form-status show error';
     } finally {
       formSubmitBtn.disabled = false;
-      formSubmitBtn.textContent = 'Send Project Brief';
+      formSubmitBtn.textContent = t['form.submit'];
     }
   });
 </script>
